@@ -29,6 +29,16 @@ namespace INFOMAA_Assignment
             return cleanCopy;
         }
 
+        public ActionSet Clone()
+        {
+            ActionSet clone = CleanCopy();
+            foreach (KeyValuePair<int, int> kvp in actionPayoff)
+            {
+                clone.Add(kvp);
+            }
+            return clone;
+        }
+
         public KeyValuePair<int, int> GetBestAction()
         {
             KeyValuePair<int, int> best = new KeyValuePair<int, int>(-1, int.MinValue);

@@ -21,7 +21,9 @@ namespace INFOMAA_Assignment
             int dx = (int)(speed * Math.Cos(angle));
             int dy = (int)(speed * Math.Sin(angle));
             int nextX = (currentPosition.X + dx) % width;
+            if (nextX < 0) nextX = width + nextX;
             int nextY = (currentPosition.Y + dy) % height;
+            if (nextY < 0) nextY = height + nextY;
             return new Position(nextX, nextY);
         }
     }

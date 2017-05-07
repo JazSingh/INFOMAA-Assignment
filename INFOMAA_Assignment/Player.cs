@@ -17,6 +17,8 @@ namespace INFOMAA_Assignment
             this.distribution = distribution;
         }
 
+        public ActionSet ActionSet { get { return actionSet; } }
+
         public void SetPosition(Position newPosition)
         {
             position = newPosition;

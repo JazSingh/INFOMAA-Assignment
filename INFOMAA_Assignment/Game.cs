@@ -7,6 +7,7 @@ namespace INFOMAA_Assignment
 {
     public class Game
     {
+        Logger logger;
         readonly Torus torus;
         ActionSet actionSet;
         Player[] players;
@@ -17,12 +18,10 @@ namespace INFOMAA_Assignment
         readonly int negativeReward;
         readonly int speed;
 
-        long clock;
-        long gameLength;
+        int clock;
+        int gameLength;
 
-        int numColission = 0;
-
-        public Game(Torus torus, int numPlayers, ActionSet actionSet, int colissionRadius, int positiveReward, int negativeReward, int speed, Distribution distribution, long gameLength)
+        public Game(Torus torus, int numPlayers, ActionSet actionSet, int colissionRadius, int positiveReward, int negativeReward, int speed, Distribution distribution, int gameLength)
         {
             clock = 0;
             this.gameLength = gameLength;
@@ -45,6 +44,8 @@ namespace INFOMAA_Assignment
                 int y = randomService.Next(0, torus.Height);
                 players[i].SetPosition(new Position(x, y));
             }
+
+            logger = new Logger(gameLength, numPlayers);
         }
 
         public void Start()
@@ -69,29 +70,28 @@ namespace INFOMAA_Assignment
                         bool colission = false;
                         for (int j = 0; j < numPlayers; j++)
                         {
-                            colission |= (i != j && IsColission(next, players[j]));
+                            colission |= (i != j && IsCollision(next, players[j]));
                         }
                         if (!colission)
                         {
                             actionDone = true;
-                            actionSet[action]++;
+                            logger.LogActionSet(clock, i, players[i].ActionSet);
                             players[i].SetPosition(next);
                             players[i].AddReward(action, positiveReward);
                         }
                         else
                         {
-                            numColission++;
+                            logger.LogCollision(clock);
                             players[i].AddReward(action, negativeReward);
                         }
                     }
                 }
                 clock++;
             }
-            Console.WriteLine(actionSet);
-            Console.WriteLine("Number of colissions: {0}", numColission);
+            logger.Dump();
         }
 
-        private bool IsColission(Position pos, Player player)
+        private bool IsCollision(Position pos, Player player)
         {
             return Math.Sqrt((player.GetPosition().X - pos.X) * (player.GetPosition().X - pos.X) + (player.GetPosition().Y - pos.Y) * (player.GetPosition().Y - pos.Y)) < colissionRadius;
         }

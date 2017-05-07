@@ -11,10 +11,10 @@ namespace INFOMAA_Assignment
 
             int[] ks = { 30, 24, 20, 18, 12, 10, 9, 8, 6, 5, 4 };
             Torus torus = new Torus(100, 100);
-            ActionSet actionSet = new ActionSet(30);
-            Distribution distribution = new Distribution(0.5, new Random(1));
+            ActionSet actionSet = new ActionSet(6);
+            Distribution distribution = new Distribution(0.05, new Random(1));
 
-            Game game = new Game(torus, 10, actionSet, 3, 1, -10, 10, distribution, 1000000);
+            Game game = new Game(torus, 20, actionSet, 3, 1, -100, 3, distribution, 100000);
             game.Start();
             Console.ReadLine();
         }
