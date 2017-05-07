@@ -37,8 +37,6 @@ namespace INFOMAA_Assignment
                 int x = randomService.Next(0, torus.Width);
                 int y = randomService.Next(0, torus.Height);
                 players[i].SetPosition(new Position(x, y));
-                int action = randomService.Next(0, actionSet.Count);
-                players[i].SetDirection(actionSet.Values.ToArray()[action]);
             }
         }
 

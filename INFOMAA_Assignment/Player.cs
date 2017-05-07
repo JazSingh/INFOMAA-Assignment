@@ -7,7 +7,6 @@ namespace INFOMAA_Assignment
     public class Player
     {
         private Position position;
-        private int direction;
         private int reward;
         private ActionSet actionSet;
         private readonly Distribution distribution;
@@ -23,19 +22,9 @@ namespace INFOMAA_Assignment
             position = newPosition;
         }
 
-        public void SetDirection(int newDirection)
-        {
-            direction = newDirection;
-        }
-
         public Position GetPosition()
         {
             return position;
-        }
-
-        public int GetDirection()
-        {
-            return direction;
         }
 
         public void AddReward(int direction, int reward)
