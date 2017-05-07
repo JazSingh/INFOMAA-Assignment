@@ -13,6 +13,11 @@ namespace INFOMAA_Assignment
             this.epsilon = epsilon;
         }
 
+        public Distribution Clone()
+        {
+            return new Distribution(epsilon, distribution.RandomSource);
+        }
+
         public ActionType Sample()
         {
             double sample = distribution.Sample();

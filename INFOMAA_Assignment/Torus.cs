@@ -20,8 +20,8 @@ namespace INFOMAA_Assignment
             //double radians = angle * (Math.PI / 180);
             int dx = (int)(speed * Math.Cos(angle));
             int dy = (int)(speed * Math.Sin(angle));
-            int nextX = (currentPosition.X + dx) % (width + 1);
-            int nextY = (currentPosition.Y + dy) % (height + 1);
+            int nextX = (currentPosition.X + dx) % width;
+            int nextY = (currentPosition.Y + dy) % height;
             return new Position(nextX, nextY);
         }
     }

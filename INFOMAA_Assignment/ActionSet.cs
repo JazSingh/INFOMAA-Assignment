@@ -8,19 +8,24 @@ namespace INFOMAA_Assignment
     public class ActionSet : IDictionary<int, int>
     {
         Dictionary<int, int> actionPayoff;
+        int numActions;
 
-        public ActionSet()
+        public ActionSet(int numActions)
         {
+            this.numActions = numActions;
             actionPayoff = new Dictionary<int, int>();
+            int direction = 0;
+            int step = 360 / numActions;
+            while (direction < 360)
+            {
+                actionPayoff.Add(direction, 0);
+                direction += step;
+            }
         }
 
         public ActionSet CleanCopy()
         {
-            ActionSet cleanCopy = new ActionSet();
-            foreach (int action in actionPayoff.Values)
-            {
-                cleanCopy.Add(action, 0);
-            }
+            ActionSet cleanCopy = new ActionSet(numActions);
             return cleanCopy;
         }
 
@@ -136,6 +141,16 @@ namespace INFOMAA_Assignment
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        public override string ToString()
+        {
+            string s = string.Format("[ActionSet: \n");
+            foreach (KeyValuePair<int, int> kvp in actionPayoff)
+            {
+                s += string.Format("\t[action: {0}, value: {1}]\n", kvp.Key, kvp.Value);
+            }
+            return s += "]";
         }
     }
 }

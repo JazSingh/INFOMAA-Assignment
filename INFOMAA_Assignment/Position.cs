@@ -41,5 +41,10 @@ namespace INFOMAA_Assignment
         {
             return !(left == right);
         }
+
+        public override string ToString()
+        {
+            return string.Format("[Position: X={0}, Y={1}]", X, Y);
+        }
     }
 }
