@@ -30,6 +30,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="MathNet.Numerics">
+      <HintPath>..\packages\MathNet.Numerics.3.19.0\lib\net40\MathNet.Numerics.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -38,7 +41,12 @@
     <Compile Include="Torus.cs" />
     <Compile Include="Position.cs" />
     <Compile Include="Player.cs" />
-    <Compile Include="DirectionRotator.cs" />
+    <Compile Include="ActionSet.cs" />
+    <Compile Include="Distribution.cs" />
+    <Compile Include="ActionType.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

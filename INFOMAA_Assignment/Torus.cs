@@ -11,5 +11,10 @@ namespace INFOMAA_Assignment
             this.width = width;
             this.height = height;
         }
+
+        public Position NextPosition(Position currentPosition, int delta, int angle)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

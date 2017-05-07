@@ -24,7 +24,7 @@ namespace INFOMAA_Assignment
 
         public override int GetHashCode()
         {
-            return base.GetHashCode()
+            return base.GetHashCode();
         }
 
         public static bool operator ==(Position left, Position right)
