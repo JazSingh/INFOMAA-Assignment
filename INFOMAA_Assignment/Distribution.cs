@@ -4,24 +4,24 @@ namespace INFOMAA_Assignment
 {
     public class Distribution
     {
-        private ContinuousUniform distribution;
-        private double epsilon;
+        private ContinuousUniform _distribution;
+        private double _epsilon;
 
         public Distribution(double epsilon, Random randomService)
         {
-            this.distribution = new ContinuousUniform(0, 1, randomService);
-            this.epsilon = epsilon;
+            _distribution = new ContinuousUniform(0, 1, randomService);
+            _epsilon = epsilon;
         }
 
         public Distribution Clone()
         {
-            return new Distribution(epsilon, distribution.RandomSource);
+            return new Distribution(_epsilon, _distribution.RandomSource);
         }
 
         public ActionType Sample()
         {
-            double sample = distribution.Sample();
-            if (sample < epsilon)
+            double sample = _distribution.Sample();
+            if (sample < _epsilon)
             {
                 return ActionType.EXPLOIT;
             }
@@ -30,7 +30,7 @@ namespace INFOMAA_Assignment
 
         public Random GetRandomService()
         {
-            return distribution.RandomSource;
+            return _distribution.RandomSource;
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using MathNet.Numerics;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -7,51 +6,50 @@ namespace INFOMAA_Assignment
 {
     public class Player
     {
-        private Position position;
-        private ActionSet actionSet;
-        private readonly Distribution distribution;
+        private Position _position;
+        private readonly Distribution _distribution;
 
         public Player(ActionSet actionSet, Distribution distribution)
         {
-            this.actionSet = actionSet.CleanCopy();
-            this.distribution = distribution;
+            ActionSet = actionSet.CleanCopy();
+            _distribution = distribution;
         }
 
-        public ActionSet ActionSet { get { return actionSet; } }
+        public ActionSet ActionSet { get; }
 
         public void SetPosition(Position newPosition)
         {
-            position = newPosition;
+            _position = newPosition;
         }
 
         public Position GetPosition()
         {
-            return position;
+            return _position;
         }
 
         public void AddReward(int direction, int reward)
         {
-            actionSet[direction] += reward;
+            ActionSet[direction] += reward;
         }
 
         public int GetReward(int direction)
         {
-            return actionSet[direction];
+            return ActionSet[direction];
         }
 
         public int GetAction(List<int> tabooList)
         {
-            if (tabooList.Count() == 0)
+            if (!tabooList.Any())
             {
                 // Exploit
-                if (distribution.Sample() == ActionType.EXPLOIT)
-                    return actionSet.GetBestAction().Key;
+                if (_distribution.Sample() == ActionType.EXPLOIT)
+                    return ActionSet.GetBestAction().Key;
                 // Explore
-                Random randomService = distribution.GetRandomService();
-                int action = randomService.Next(0, actionSet.Count);
-                return actionSet.Keys.ToArray()[action];
+                Random randomService = _distribution.GetRandomService();
+                int action = randomService.Next(0, ActionSet.Count);
+                return ActionSet.Keys.ToArray()[action];
             }
-            foreach (KeyValuePair<int, int> kvp in actionSet)
+            foreach (KeyValuePair<int, int> kvp in ActionSet)
             {
                 if (!tabooList.Contains(kvp.Key))
                     return kvp.Key;

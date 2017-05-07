@@ -3,18 +3,15 @@ namespace INFOMAA_Assignment
 {
     public struct Position : IEquatable<Position>
     {
-        private int x;
-        private int y;
-
         public Position(int x, int y)
         {
-            this.x = x;
-            this.y = y;
+            X = x;
+            Y = y;
         }
 
-        public int X { get { return x; } }
+        public int X { get; }
 
-        public int Y { get { return y; } }
+        public int Y { get; }
 
 
         public override bool Equals(Object obj)
@@ -24,7 +21,7 @@ namespace INFOMAA_Assignment
 
         public bool Equals(Position other)
         {
-            return this.x == other.x && this.y == other.y;
+            return X == other.X && this.Y == other.Y;
         }
 
         public override int GetHashCode()
@@ -44,7 +41,7 @@ namespace INFOMAA_Assignment
 
         public override string ToString()
         {
-            return string.Format("[Position: X={0}, Y={1}]", X, Y);
+            return $"[Position: X={X}, Y={Y}]";
         }
     }
 }

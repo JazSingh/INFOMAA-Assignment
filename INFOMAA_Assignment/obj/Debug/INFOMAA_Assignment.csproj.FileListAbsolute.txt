@@ -1,0 +1,6 @@
+C:\Users\Danii\Source\Repos\INFOMAA-Assignment\INFOMAA_Assignment\bin\Debug\INFOMAA_Assignment.exe
+C:\Users\Danii\Source\Repos\INFOMAA-Assignment\INFOMAA_Assignment\bin\Debug\INFOMAA_Assignment.pdb
+C:\Users\Danii\Source\Repos\INFOMAA-Assignment\INFOMAA_Assignment\bin\Debug\MathNet.Numerics.dll
+C:\Users\Danii\Source\Repos\INFOMAA-Assignment\INFOMAA_Assignment\bin\Debug\MathNet.Numerics.xml
+C:\Users\Danii\Source\Repos\INFOMAA-Assignment\INFOMAA_Assignment\obj\Debug\INFOMAA_Assignment.exe
+C:\Users\Danii\Source\Repos\INFOMAA-Assignment\INFOMAA_Assignment\obj\Debug\INFOMAA_Assignment.pdb

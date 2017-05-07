@@ -7,39 +7,39 @@ namespace INFOMAA_Assignment
     public class Logger
     {
         // Propensities per per t per player
-        ActionSet[] propensitiesPerTimeStep;
-        int[] colissionsPerTimeStep;
+        ActionSet[] _propensitiesPerTimeStep;
+        int[] _colissionsPerTimeStep;
 
-        int numSteps;
-        int numPlayers;
+        int _numSteps;
+        int _numPlayers;
 
-        string timestamp;
+        string _timestamp;
 
         public Logger(int timeSteps, int numPlayers)
         {
-            timestamp = DateTime.Now.ToString("O");
-            numSteps = timeSteps;
-            this.numPlayers = numPlayers;
-            propensitiesPerTimeStep = new ActionSet[timeSteps];
-            colissionsPerTimeStep = new int[timeSteps];
+            _timestamp = DateTime.Now.ToString("O");
+            _numSteps = timeSteps;
+            _numPlayers = numPlayers;
+            _propensitiesPerTimeStep = new ActionSet[timeSteps];
+            _colissionsPerTimeStep = new int[timeSteps];
         }
 
         public void LogActionSet(int timeStep, int player, ActionSet actionSet)
         {
-            if (propensitiesPerTimeStep[timeStep] == null)
+            if (_propensitiesPerTimeStep[timeStep] == null)
             {
-                propensitiesPerTimeStep[timeStep] = actionSet.CleanCopy();
+                _propensitiesPerTimeStep[timeStep] = actionSet.CleanCopy();
             }
 
             foreach (KeyValuePair<int, int> kvp in actionSet)
             {
-                propensitiesPerTimeStep[timeStep][kvp.Key] += kvp.Value;
+                _propensitiesPerTimeStep[timeStep][kvp.Key] += kvp.Value;
             }
         }
 
         public void LogCollision(int timeStep)
         {
-            colissionsPerTimeStep[timeStep]++;
+            _colissionsPerTimeStep[timeStep]++;
         }
 
         public void Dump()
@@ -52,11 +52,11 @@ namespace INFOMAA_Assignment
 
         private void DumpScoresPerActionPerTimeStep()
         {
-            string[] entries = new string[numSteps + 1];
-            entries[0] = CreateHeader(propensitiesPerTimeStep[0]);
-            for (int i = 1; i < numSteps + 1; i++)
+            string[] entries = new string[_numSteps + 1];
+            entries[0] = CreateHeader(_propensitiesPerTimeStep[0]);
+            for (int i = 1; i < _numSteps + 1; i++)
             {
-                entries[i] += CreateEntry(i, propensitiesPerTimeStep[i - 1]);
+                entries[i] += CreateEntry(i, _propensitiesPerTimeStep[i - 1]);
             }
             File.WriteAllLines("_scores.csv", entries);
         }
@@ -66,17 +66,17 @@ namespace INFOMAA_Assignment
             string header = "time";
             foreach (KeyValuePair<int, int> kvp in set)
             {
-                header += string.Format(";{0} deg", kvp.Key);
+                header += $";{kvp.Key} deg";
             }
             return header;
         }
 
         private string CreateEntry(int timestep, ActionSet set)
         {
-            string entry = string.Format("{0}", timestep);
+            string entry = $"{timestep}";
             foreach (KeyValuePair<int, int> kvp in set)
             {
-                entry += string.Format(";{0:0,000}", ((kvp.Value / (double)numPlayers)));
+                entry += $";{((kvp.Value/(double) _numPlayers)):0,000}";
             }
             return entry;
         }
@@ -84,11 +84,11 @@ namespace INFOMAA_Assignment
 
         private void DumpColissions()
         {
-            string[] entries = new string[numSteps + 1];
+            string[] entries = new string[_numSteps + 1];
             entries[0] = "step;numColissions\n";
-            for (int i = 1; i < numSteps + 1; i++)
+            for (int i = 1; i < _numSteps + 1; i++)
             {
-                entries[i] += string.Format("{0};{1}\n", i, colissionsPerTimeStep[i - 1]);
+                entries[i] += $"{i};{_colissionsPerTimeStep[i - 1]}\n";
             }
             File.WriteAllLines("_collisions.csv", entries);
         }

@@ -10,11 +10,16 @@ namespace INFOMAA_Assignment
             //                                        k: 30, 24, 20, 18, 12, 10, 9, 8, 6, 5, 4
 
             int[] ks = { 30, 24, 20, 18, 12, 10, 9, 8, 6, 5, 4 };
+            int numberOfPlayers = 20;
+            int positiveReward = 1;
+            int negativeReward = -100;
+            int speed = 3;
+            int gameLength = 1000;
             Torus torus = new Torus(100, 100);
             ActionSet actionSet = new ActionSet(6);
             Distribution distribution = new Distribution(0.05, new Random(1));
 
-            Game game = new Game(torus, 20, actionSet, 3, 1, -100, 3, distribution, 100000);
+            Game game = new Game(torus, numberOfPlayers, actionSet, 3, positiveReward, negativeReward, speed, distribution, gameLength);
             game.Start();
             Console.ReadLine();
         }

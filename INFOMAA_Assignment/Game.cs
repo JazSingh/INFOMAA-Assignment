@@ -7,93 +7,93 @@ namespace INFOMAA_Assignment
 {
     public class Game
     {
-        Logger logger;
-        readonly Torus torus;
-        ActionSet actionSet;
-        Player[] players;
+        Logger _logger;
+        readonly Torus _torus;
+        ActionSet _actionSet;
+        Player[] _players;
 
-        readonly int numPlayers;
-        readonly int colissionRadius;
-        readonly int positiveReward;
-        readonly int negativeReward;
-        readonly int speed;
+        readonly int _numPlayers;
+        readonly int _colissionRadius;
+        readonly int _positiveReward;
+        readonly int _negativeReward;
+        readonly int _speed;
 
-        int clock;
-        int gameLength;
+        int _clock;
+        int _gameLength;
 
         public Game(Torus torus, int numPlayers, ActionSet actionSet, int colissionRadius, int positiveReward, int negativeReward, int speed, Distribution distribution, int gameLength)
         {
-            clock = 0;
-            this.gameLength = gameLength;
+            _clock = 0;
+            _gameLength = gameLength;
 
-            this.torus = torus;
-            this.actionSet = actionSet;
+            _torus = torus;
+            _actionSet = actionSet;
 
-            this.colissionRadius = colissionRadius;
-            this.positiveReward = positiveReward;
-            this.negativeReward = negativeReward;
-            this.numPlayers = numPlayers;
-            this.speed = speed;
+            _colissionRadius = colissionRadius;
+            _positiveReward = positiveReward;
+            _negativeReward = negativeReward;
+            _numPlayers = numPlayers;
+            _speed = speed;
 
-            players = new Player[numPlayers];
+            _players = new Player[numPlayers];
             for (int i = 0; i < numPlayers; i++)
             {
-                players[i] = new Player(actionSet, distribution);
+                _players[i] = new Player(actionSet, distribution);
                 Random randomService = distribution.GetRandomService();
                 int x = randomService.Next(0, torus.Width);
                 int y = randomService.Next(0, torus.Height);
-                players[i].SetPosition(new Position(x, y));
+                _players[i].SetPosition(new Position(x, y));
             }
 
-            logger = new Logger(gameLength, numPlayers);
+            _logger = new Logger(gameLength, numPlayers);
         }
 
         public void Start()
         {
-            while (clock < gameLength)
+            while (_clock < _gameLength)
             {
-                Console.WriteLine(clock);
-                for (int i = 0; i < numPlayers; i++)
+                Console.WriteLine(_clock);
+                for (int i = 0; i < _numPlayers; i++)
                 {
-                    Console.WriteLine(players[i].GetPosition());
+                    Console.WriteLine(_players[i].GetPosition());
                     bool actionDone = false;
                     List<int> tabooList = new List<int>();
                     while (!actionDone)
                     {
-                        int action = players[i].GetAction(tabooList);
+                        int action = _players[i].GetAction(tabooList);
                         if (action == -1)
                         {
                             throw new Exception("No suitable action found");
                         }
                         tabooList.Add(action);
-                        Position next = torus.NextPosition(players[i].GetPosition(), speed, action);
+                        Position next = _torus.NextPosition(_players[i].GetPosition(), _speed, action);
                         bool colission = false;
-                        for (int j = 0; j < numPlayers; j++)
+                        for (int j = 0; j < _numPlayers; j++)
                         {
-                            colission |= (i != j && IsCollision(next, players[j]));
+                            colission |= (i != j && IsCollision(next, _players[j]));
                         }
                         if (!colission)
                         {
                             actionDone = true;
-                            logger.LogActionSet(clock, i, players[i].ActionSet);
-                            players[i].SetPosition(next);
-                            players[i].AddReward(action, positiveReward);
+                            _logger.LogActionSet(_clock, i, _players[i].ActionSet);
+                            _players[i].SetPosition(next);
+                            _players[i].AddReward(action, _positiveReward);
                         }
                         else
                         {
-                            logger.LogCollision(clock);
-                            players[i].AddReward(action, negativeReward);
+                            _logger.LogCollision(_clock);
+                            _players[i].AddReward(action, _negativeReward);
                         }
                     }
                 }
-                clock++;
+                _clock++;
             }
-            logger.Dump();
+            _logger.Dump();
         }
 
         private bool IsCollision(Position pos, Player player)
         {
-            return Math.Sqrt((player.GetPosition().X - pos.X) * (player.GetPosition().X - pos.X) + (player.GetPosition().Y - pos.Y) * (player.GetPosition().Y - pos.Y)) < colissionRadius;
+            return Math.Sqrt((player.GetPosition().X - pos.X) * (player.GetPosition().X - pos.X) + (player.GetPosition().Y - pos.Y) * (player.GetPosition().Y - pos.Y)) < _colissionRadius;
         }
     }
 }
