@@ -12,10 +12,8 @@ namespace INFOMAA_Assignment
         private ActionSet actionSet;
         private readonly Distribution distribution;
 
-        public Player(Position position, int direction, ActionSet actionSet, Distribution distribution)
+        public Player(ActionSet actionSet, Distribution distribution)
         {
-            this.position = position;
-            this.direction = direction;
             this.actionSet = actionSet.CleanCopy();
             this.distribution = distribution;
         }

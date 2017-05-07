@@ -1,14 +1,15 @@
 ﻿<Properties StartupConfiguration="{3659ACCF-BBE1-4A33-BBE5-6426D4546C36}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="INFOMAA_Assignment/ActionType.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="INFOMAA_Assignment/ActionSet.cs">
     <Files>
       <File FileName="INFOMAA_Assignment/Program.cs" Line="1" Column="1" />
       <File FileName="INFOMAA_Assignment/Game.cs" Line="7" Column="21" />
-      <File FileName="INFOMAA_Assignment/Torus.cs" Line="14" Column="6" />
-      <File FileName="INFOMAA_Assignment/Position.cs" Line="27" Column="38" />
-      <File FileName="INFOMAA_Assignment/Player.cs" Line="56" Column="13" />
-      <File FileName="INFOMAA_Assignment/ActionSet.cs" Line="101" Column="43" />
+      <File FileName="INFOMAA_Assignment/Torus.cs" Line="17" Column="15" />
+      <File FileName="INFOMAA_Assignment/Position.cs" Line="26" Column="10" />
+      <File FileName="INFOMAA_Assignment/Player.cs" Line="13" Column="21" />
+      <File FileName="INFOMAA_Assignment/ActionSet.cs" Line="33" Column="32" />
       <File FileName="INFOMAA_Assignment/ActionType.cs" Line="6" Column="25" />
-      <File FileName="INFOMAA_Assignment/Distribution.cs" Line="28" Column="46" />
+      <File FileName="INFOMAA_Assignment/Distribution.cs" Line="5" Column="12" />
+      <File FileName="INFOMAA_Assignment/packages.config" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />

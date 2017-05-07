@@ -26,7 +26,13 @@ namespace INFOMAA_Assignment
 
         public KeyValuePair<int, int> GetBestAction()
         {
-            throw new NotImplementedException(); //TODO
+            KeyValuePair<int, int> best = new KeyValuePair<int, int>(-1, int.MinValue);
+            foreach (KeyValuePair<int, int> kvp in actionPayoff)
+            {
+                if (kvp.Value > best.Value)
+                    best = kvp;
+            }
+            return best;
         }
 
         public int this[int key]

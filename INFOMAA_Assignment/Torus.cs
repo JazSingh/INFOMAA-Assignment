@@ -12,9 +12,17 @@ namespace INFOMAA_Assignment
             this.height = height;
         }
 
-        public Position NextPosition(Position currentPosition, int delta, int angle)
+        public int Width { get { return width; } }
+        public int Height { get { return height; } }
+
+        public Position NextPosition(Position currentPosition, int speed, int angle)
         {
-            throw new NotImplementedException();
+            //double radians = angle * (Math.PI / 180);
+            int dx = (int)(speed * Math.Cos(angle));
+            int dy = (int)(speed * Math.Sin(angle));
+            int nextX = (currentPosition.X + dx) % (width + 1);
+            int nextY = (currentPosition.Y + dy) % (height + 1);
+            return new Position(nextX, nextY);
         }
     }
 }

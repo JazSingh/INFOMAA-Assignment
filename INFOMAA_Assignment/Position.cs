@@ -12,6 +12,11 @@ namespace INFOMAA_Assignment
             this.y = y;
         }
 
+        public int X { get { return x; } }
+
+        public int Y { get { return y; } }
+
+
         public override bool Equals(Object obj)
         {
             return obj is Position && this == (Position)obj;
