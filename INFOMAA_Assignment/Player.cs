@@ -41,7 +41,7 @@ namespace INFOMAA_Assignment
         {
             // Exploit
             if (_distribution.Sample() == ActionType.EXPLOIT)
-                return ActionSet.GetBestAction().Key;
+                return ActionSet.GetBestAction();
             // Explore
             Random randomService = _distribution.GetRandomService();
             int action = randomService.Next(0, ActionSet.Count);
