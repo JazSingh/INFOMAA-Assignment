@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
 
 namespace INFOMAA_Assignment
 {
@@ -72,7 +70,6 @@ namespace INFOMAA_Assignment
             Console.WriteLine(_clock);
             for (int i = 0; i < _numPlayers; i++)
             {
-                Console.WriteLine(_players[i].GetPosition());
                 bool actionDone = false;
                 List<int> tabooList = new List<int>();
                 while (!actionDone)
