@@ -17,9 +17,9 @@ namespace INFOMAA_Assignment
 
         public Position NextPosition(Position currentPosition, int speed, int angle)
         {
-            //double radians = angle * (Math.PI / 180);
-            int dx = (int)(speed * Math.Cos(angle));
-            int dy = (int)(speed * Math.Sin(angle));
+            double radians = angle * (Math.PI / 180);
+            int dx = (int)(speed * Math.Cos(radians));
+            int dy = (int)(speed * Math.Sin(radians));
             int nextX = (currentPosition.X + dx) % width;
             if (nextX < 0) nextX = width + nextX;
             int nextY = (currentPosition.Y + dy) % height;

@@ -23,6 +23,8 @@ namespace INFOMAA_Assignment
             }
         }
 
+        public int NumActions { get { return _numActions; } }
+
         public ActionSet CleanCopy()
         {
             ActionSet cleanCopy = new ActionSet(_numActions);

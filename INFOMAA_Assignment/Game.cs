@@ -45,7 +45,17 @@ namespace INFOMAA_Assignment
                 _players[i].SetPosition(new Position(x, y));
             }
 
-            _logger = new Logger(gameLength, numPlayers);
+            _logger = new Logger(gameLength, numPlayers, new string[]{
+                torus.Width.ToString(),
+                torus.Height.ToString(),
+                numPlayers.ToString(),
+                actionSet.NumActions.ToString(),
+                colissionRadius.ToString(),
+                speed.ToString(),
+                positiveReward.ToString(),
+                negativeReward.ToString(),
+                string.Format("{0:0.000}", distribution.Epsilon)
+            });
         }
 
         public void Start()

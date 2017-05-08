@@ -21,6 +21,7 @@ namespace INFOMAA_Assignment
 
             Game game = new Game(torus, numberOfPlayers, actionSet, 3, positiveReward, negativeReward, speed, distribution, gameLength);
             game.Start();
+            Console.WriteLine("Done");
             Console.ReadLine();
         }
     }

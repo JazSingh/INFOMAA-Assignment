@@ -13,15 +13,23 @@ namespace INFOMAA_Assignment
         int _numSteps;
         int _numPlayers;
 
-        string _timestamp;
+        string _hashcode;
+        string _parameters;
 
-        public Logger(int timeSteps, int numPlayers)
+        public Logger(int timeSteps, int numPlayers, string[] parameters)
         {
-            _timestamp = DateTime.Now.ToString("O");
             _numSteps = timeSteps;
-            _numPlayers = numPlayers;
+            this._numPlayers = numPlayers;
             _propensitiesPerTimeStep = new ActionSet[timeSteps];
             _colissionsPerTimeStep = new int[timeSteps];
+
+            _parameters = "";
+            foreach (string parameter in parameters)
+            {
+                _parameters += string.Format("-{0}", parameter);
+            }
+
+            _hashcode = GetHashCode().ToString("x8");
         }
 
         public void LogActionSet(int timeStep, int player, ActionSet actionSet)
@@ -58,7 +66,7 @@ namespace INFOMAA_Assignment
             {
                 entries[i] += CreateEntry(i, _propensitiesPerTimeStep[i - 1]);
             }
-            File.WriteAllLines("_scores.csv", entries);
+            File.WriteAllLines(_hashcode + _parameters + "_scores.csv", entries);
         }
 
         private string CreateHeader(ActionSet set)
@@ -66,17 +74,17 @@ namespace INFOMAA_Assignment
             string header = "time";
             foreach (KeyValuePair<int, int> kvp in set)
             {
-                header += $";{kvp.Key} deg";
+                header += string.Format(";{0} deg", kvp.Key);
             }
             return header;
         }
 
         private string CreateEntry(int timestep, ActionSet set)
         {
-            string entry = $"{timestep}";
+            string entry = string.Format("{0}", timestep);
             foreach (KeyValuePair<int, int> kvp in set)
             {
-                entry += $";{((kvp.Value/(double) _numPlayers)):0,000}";
+                entry += string.Format(";{0:0.000}", ((kvp.Value / (double)_numPlayers)));
             }
             return entry;
         }
@@ -88,9 +96,9 @@ namespace INFOMAA_Assignment
             entries[0] = "step;numColissions\n";
             for (int i = 1; i < _numSteps + 1; i++)
             {
-                entries[i] += $"{i};{_colissionsPerTimeStep[i - 1]}\n";
+                entries[i] += string.Format("{0};{1}\n", i, _colissionsPerTimeStep[i - 1]);
             }
-            File.WriteAllLines("_collisions.csv", entries);
+            File.WriteAllLines(_hashcode + _parameters + "_collisions.csv", entries);
         }
     }
 }

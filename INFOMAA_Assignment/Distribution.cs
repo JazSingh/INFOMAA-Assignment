@@ -13,6 +13,8 @@ namespace INFOMAA_Assignment
             _epsilon = epsilon;
         }
 
+        public double Epsilon { get { return _epsilon; } }
+
         public Distribution Clone()
         {
             return new Distribution(_epsilon, _distribution.RandomSource);
