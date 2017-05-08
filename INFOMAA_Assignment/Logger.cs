@@ -1,50 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace INFOMAA_Assignment
 {
     public class Logger
     {
         // Propensities per per t per player
-        ActionSet[] _propensitiesPerTimeStep;
+        // ActionSet[] _propensitiesPerTimeStep;
+
+        private Dictionary<int, List<double>> _meanPerTimeStep = new Dictionary<int, List<double>>();
+
         int[] _colissionsPerTimeStep;
 
         int _numSteps;
         int _numPlayers;
 
-        string _hashcode;
-        string _parameters;
+        private ActionSet _actionSet;
 
-        public Logger(int timeSteps, int numPlayers, string[] parameters)
+        string _hashcode;
+        public string _parameters;
+
+        public Logger(int timeSteps, ActionSet actionSet, int numPlayers, string[] parameters)
         {
             _numSteps = timeSteps;
-            this._numPlayers = numPlayers;
-            _propensitiesPerTimeStep = new ActionSet[timeSteps];
+            _numPlayers = numPlayers;
+            _actionSet = actionSet;
             _colissionsPerTimeStep = new int[timeSteps];
+
+            foreach (int degrees in _actionSet.Keys)
+            {
+                _meanPerTimeStep.Add(degrees, new List<double>());
+            }
 
             _parameters = "";
             foreach (string parameter in parameters)
             {
-                _parameters += string.Format("-{0}", parameter);
+                _parameters += $"-{parameter}";
             }
 
             _hashcode = GetHashCode().ToString("x8");
-        }
-
-        public string Parameters { get { return _parameters; } }
-
-        public void LogActionSet(int timeStep, int player, ActionSet actionSet)
-        {
-            if (_propensitiesPerTimeStep[timeStep] == null)
-            {
-                _propensitiesPerTimeStep[timeStep] = actionSet.CleanCopy();
-            }
-
-            foreach (KeyValuePair<int, int> kvp in actionSet)
-            {
-                _propensitiesPerTimeStep[timeStep][kvp.Key] += kvp.Value;
-            }
         }
 
         public void LogCollision(int timeStep)
@@ -52,9 +48,29 @@ namespace INFOMAA_Assignment
             _colissionsPerTimeStep[timeStep]++;
         }
 
+        public void LogActionMeans(int timeStep, Dictionary<int, List<int>> meanRewardPerAction)
+        {
+            foreach (int action in meanRewardPerAction.Keys)
+            {
+                double sum = 0;
+                foreach (int score in meanRewardPerAction[action])
+                {
+                    sum += score;
+                }
+                double mean = sum / meanRewardPerAction[action].Count;
+
+                if (mean > 1)
+                {
+                    Console.WriteLine($"Mean > 1: {mean}");
+                    Console.ReadLine();
+                }
+                _meanPerTimeStep[action].Add(mean);
+            }
+        }
+
         public void Dump()
         {
-            Console.WriteLine("Dumping scores per action per time step");
+            Console.WriteLine("\nDumping scores per action per time step");
             DumpScoresPerActionPerTimeStep();
             Console.WriteLine("Dumping collisions");
             DumpColissions();
@@ -63,32 +79,43 @@ namespace INFOMAA_Assignment
         private void DumpScoresPerActionPerTimeStep()
         {
             string[] entries = new string[_numSteps + 1];
-            entries[0] = CreateHeader(_propensitiesPerTimeStep[0]);
-            for (int i = 1; i < _numSteps + 1; i++)
+            entries[0] = CreateHeader(_actionSet);
+
+            for (int i = 1; i <= _numSteps; i++)
             {
-                entries[i] += CreateEntry(i, _propensitiesPerTimeStep[i - 1]);
+                List<double> meansPerAction = new List<double>();
+                foreach (KeyValuePair<int, List<double>> kvp in _meanPerTimeStep)
+                {
+                    meansPerAction.Add(kvp.Value[i - 1]);
+                }
+                entries[i] += CreateEntry(i, meansPerAction);
             }
             File.WriteAllLines(_hashcode + _parameters + "_scores.csv", entries);
         }
 
-        private string CreateHeader(ActionSet set)
+        private string CreateEntry(int timeStep, List<double> meansPerAction)
         {
-            string header = "time";
-            foreach (KeyValuePair<int, int> kvp in set)
+            string entry = $"{timeStep}";
+            foreach (double mean in meansPerAction)
             {
-                header += string.Format(";action{0}", kvp.Key);
-            }
-            return header;
-        }
-
-        private string CreateEntry(int timestep, ActionSet set)
-        {
-            string entry = string.Format("{0}", timestep);
-            foreach (KeyValuePair<int, int> kvp in set)
-            {
-                entry += string.Format(";{0:0.000}", ((kvp.Value / (double)_numPlayers)));
+                if (mean > 1)
+                {
+                    Console.WriteLine($"Mean too high!");
+                    Console.Read();
+                }
+                entry += $";{mean:0.000}";
             }
             return entry;
+        }
+
+        private string CreateHeader(ActionSet actionSet)
+        {
+            string header = "time";
+            foreach (KeyValuePair<int, int> kvp in actionSet)
+            {
+                header += $";action {kvp.Key} degrees";
+            }
+            return header;
         }
 
 
@@ -98,7 +125,7 @@ namespace INFOMAA_Assignment
             entries[0] = "step;numColissions\n";
             for (int i = 1; i < _numSteps + 1; i++)
             {
-                entries[i] += string.Format("{0};{1}\n", i, _colissionsPerTimeStep[i - 1]);
+                entries[i] += $"{i};{_colissionsPerTimeStep[i - 1]}";
             }
             File.WriteAllLines(_hashcode + _parameters + "_collisions.csv", entries);
         }

@@ -23,7 +23,7 @@ namespace INFOMAA_Assignment
             }
         }
 
-        public int NumActions { get { return _numActions; } }
+        public int NumActions => _numActions;
 
         public ActionSet CleanCopy()
         {

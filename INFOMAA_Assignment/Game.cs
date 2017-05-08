@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace INFOMAA_Assignment
 {
@@ -43,7 +44,7 @@ namespace INFOMAA_Assignment
                 _players[i].SetPosition(new Position(x, y));
             }
 
-            _logger = new Logger(gameLength, numPlayers, new string[]{
+            _logger = new Logger(gameLength, actionSet.CleanCopy(), numPlayers, new[]{
                 torus.Width.ToString(),
                 torus.Height.ToString(),
                 numPlayers.ToString(),
@@ -52,15 +53,17 @@ namespace INFOMAA_Assignment
                 speed.ToString(),
                 positiveReward.ToString(),
                 negativeReward.ToString(),
-                string.Format("{0:0.000}", distribution.Epsilon)
+                $"{distribution.Epsilon:0.000}"
             });
         }
 
         public void Start()
         {
-            Console.WriteLine("{0}-", _logger.Parameters);
+            Console.WriteLine("{0}-", _logger._parameters);
             while (_clock < _gameLength)
             {
+                Console.Write($"\rGametime: {_clock + 1} of {_gameLength} seconds");
+
                 Step();
             }
             _logger.Dump();
@@ -68,6 +71,8 @@ namespace INFOMAA_Assignment
 
         public void Step()
         {
+            Dictionary<int, List<int>> rewardsPerAction = new Dictionary<int, List<int>>();
+
             for (int i = 0; i < _numPlayers; i++)
             {
                 bool actionDone = false;
@@ -82,14 +87,15 @@ namespace INFOMAA_Assignment
                     tabooList.Add(action);
                     Position next = _torus.NextPosition(_players[i].GetPosition(), _speed, action);
                     bool colission = false;
+
                     for (int j = 0; j < _numPlayers; j++)
                     {
                         colission |= (i != j && IsCollision(next, _players[j]));
                     }
+
+                    actionDone = true;
                     if (!colission)
                     {
-                        actionDone = true;
-                        _logger.LogActionSet(_clock, i, _players[i].ActionSet);
                         _players[i].SetPosition(next);
                         _players[i].AddReward(action, _positiveReward);
                     }
@@ -98,8 +104,20 @@ namespace INFOMAA_Assignment
                         _logger.LogCollision(_clock);
                         _players[i].AddReward(action, _negativeReward);
                     }
+
+                    // Initialize list of scores for this action
+                    if (!rewardsPerAction.ContainsKey(action))
+                    {
+                        rewardsPerAction.Add(action, new List<int>());
+                    }
+
+                    // Add score to list
+                    rewardsPerAction[action].Add(!colission ? _positiveReward : _negativeReward);
                 }
             }
+
+            // Log means of scores per action
+            _logger.LogActionMeans(_clock, rewardsPerAction);
             _clock++;
         }
 
