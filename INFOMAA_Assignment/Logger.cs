@@ -32,6 +32,8 @@ namespace INFOMAA_Assignment
             _hashcode = GetHashCode().ToString("x8");
         }
 
+        public string Parameters { get { return _parameters; } }
+
         public void LogActionSet(int timeStep, int player, ActionSet actionSet)
         {
             if (_propensitiesPerTimeStep[timeStep] == null)
@@ -74,7 +76,7 @@ namespace INFOMAA_Assignment
             string header = "time";
             foreach (KeyValuePair<int, int> kvp in set)
             {
-                header += string.Format(";{0} deg", kvp.Key);
+                header += string.Format(";action{0}", kvp.Key);
             }
             return header;
         }

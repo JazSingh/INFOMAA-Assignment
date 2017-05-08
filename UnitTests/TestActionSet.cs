@@ -7,7 +7,7 @@ namespace UnitTests
     public class TestActionSet
     {
         [Test()]
-        public void TestActionSet()
+        public void TestSomething()
         {
         }
     }

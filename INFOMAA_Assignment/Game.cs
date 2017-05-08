@@ -7,7 +7,7 @@ namespace INFOMAA_Assignment
     {
         Logger _logger;
         readonly Torus _torus;
-        ActionSet _actionSet;
+        //ActionSet _actionSet;
         Player[] _players;
 
         readonly int _numPlayers;
@@ -25,7 +25,7 @@ namespace INFOMAA_Assignment
             _gameLength = gameLength;
 
             _torus = torus;
-            _actionSet = actionSet;
+            //_actionSet = actionSet;
 
             _colissionRadius = colissionRadius;
             _positiveReward = positiveReward;
@@ -58,6 +58,7 @@ namespace INFOMAA_Assignment
 
         public void Start()
         {
+            Console.WriteLine("{0}-", _logger.Parameters);
             while (_clock < _gameLength)
             {
                 Step();
@@ -67,7 +68,6 @@ namespace INFOMAA_Assignment
 
         public void Step()
         {
-            Console.WriteLine(_clock);
             for (int i = 0; i < _numPlayers; i++)
             {
                 bool actionDone = false;
