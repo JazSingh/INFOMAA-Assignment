@@ -72,52 +72,41 @@ namespace INFOMAA_Assignment
         public void Step()
         {
             Dictionary<int, List<int>> rewardsPerAction = new Dictionary<int, List<int>>();
-
-            if (_clock % (250) == 0)
-            {
-                Console.WriteLine("{2}:\t{0}/{1}", _clock + 1, _gameLength, DateTime.Now.ToLongTimeString());
-            }
+            
             for (int i = 0; i < _numPlayers; i++)
             {
-                bool actionDone = false;
-                List<int> tabooList = new List<int>();
-                while (!actionDone)
+                int action = _players[i].GetAction();
+                if (action == -1)
                 {
-                    int action = _players[i].GetAction(tabooList);
-                    if (action == -1)
-                    {
-                        throw new Exception("No suitable action found");
-                    }
-                    tabooList.Add(action);
-                    Position next = _torus.NextPosition(_players[i].GetPosition(), _speed, action);
-                    bool colission = false;
-
-                    for (int j = 0; j < _numPlayers; j++)
-                    {
-                        colission |= (i != j && IsCollision(next, _players[j]));
-                    }
-
-                    actionDone = true;
-                    if (!colission)
-                    {
-                        _players[i].SetPosition(next);
-                        _players[i].AddReward(action, _positiveReward);
-                    }
-                    else
-                    {
-                        _logger.LogCollision(_clock);
-                        _players[i].AddReward(action, _negativeReward);
-                    }
-
-                    // Initialize list of scores for this action
-                    if (!rewardsPerAction.ContainsKey(action))
-                    {
-                        rewardsPerAction.Add(action, new List<int>());
-                    }
-
-                    // Add score to list
-                    rewardsPerAction[action].Add(!colission ? _positiveReward : _negativeReward);
+                    throw new Exception("No suitable action found");
                 }
+                Position next = _torus.NextPosition(_players[i].GetPosition(), _speed, action);
+                bool colission = false;
+
+                for (int j = 0; j < _numPlayers; j++)
+                {
+                    colission |= (i != j && IsCollision(next, _players[j]));
+                }
+
+                if (!colission)
+                {
+                    _players[i].SetPosition(next);
+                    _players[i].AddReward(action, _positiveReward);
+                }
+                else
+                {
+                    _logger.LogCollision(_clock);
+                    _players[i].AddReward(action, _negativeReward);
+                }
+
+                // Initialize list of scores for this action
+                if (!rewardsPerAction.ContainsKey(action))
+                {
+                    rewardsPerAction.Add(action, new List<int>());
+                }
+
+                // Add score to list
+                rewardsPerAction[action].Add(!colission ? _positiveReward : _negativeReward);
             }
 
             // Log means of scores per action
