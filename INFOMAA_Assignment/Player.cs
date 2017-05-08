@@ -37,24 +37,15 @@ namespace INFOMAA_Assignment
             return ActionSet[direction];
         }
 
-        public int GetAction(List<int> tabooList)
+        public int GetAction()
         {
-            if (!tabooList.Any())
-            {
-                // Exploit
-                if (_distribution.Sample() == ActionType.EXPLOIT)
-                    return ActionSet.GetBestAction().Key;
-                // Explore
-                Random randomService = _distribution.GetRandomService();
-                int action = randomService.Next(0, ActionSet.Count);
-                return ActionSet.Keys.ToArray()[action];
-            }
-            foreach (KeyValuePair<int, int> kvp in ActionSet)
-            {
-                if (!tabooList.Contains(kvp.Key))
-                    return kvp.Key;
-            }
-            return -1; // No suitable action found
+            // Exploit
+            if (_distribution.Sample() == ActionType.EXPLOIT)
+                return ActionSet.GetBestAction().Key;
+            // Explore
+            Random randomService = _distribution.GetRandomService();
+            int action = randomService.Next(0, ActionSet.Count);
+            return ActionSet.Keys.ToArray()[action];
         }
     }
 }
