@@ -40,7 +40,7 @@ namespace INFOMAA_Assignment
                 _parameters += $"-{parameter}";
             }
 
-            _hashcode = GetHashCode().ToString("x8");
+            _hashcode = DateTime.Now.GetHashCode().ToString("x8");
         }
 
         public void LogCollision(int timeStep)

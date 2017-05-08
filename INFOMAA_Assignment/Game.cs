@@ -73,6 +73,10 @@ namespace INFOMAA_Assignment
         {
             Dictionary<int, List<int>> rewardsPerAction = new Dictionary<int, List<int>>();
 
+            if (_clock % (250) == 0)
+            {
+                Console.WriteLine("{2}:\t{0}/{1}", _clock + 1, _gameLength, DateTime.Now.ToLongTimeString());
+            }
             for (int i = 0; i < _numPlayers; i++)
             {
                 bool actionDone = false;

@@ -9,6 +9,7 @@ namespace INFOMAA_Assignment
     {
         Dictionary<int, int> _actionPayoff;
         int _numActions;
+        int _bestAction = 0;
 
         public ActionSet(int numActions)
         {
@@ -41,15 +42,9 @@ namespace INFOMAA_Assignment
             return clone;
         }
 
-        public KeyValuePair<int, int> GetBestAction()
+        public int GetBestAction()
         {
-            var best = new KeyValuePair<int, int>(-1, int.MinValue);
-            foreach (KeyValuePair<int, int> kvp in _actionPayoff)
-            {
-                if (kvp.Value > best.Value)
-                    best = kvp;
-            }
-            return best;
+            return _bestAction;
         }
 
         public int this[int key]
@@ -62,6 +57,8 @@ namespace INFOMAA_Assignment
             set
             {
                 _actionPayoff[key] = value;
+                if (value > _actionPayoff[_bestAction])
+                    _bestAction = key;
             }
         }
 
