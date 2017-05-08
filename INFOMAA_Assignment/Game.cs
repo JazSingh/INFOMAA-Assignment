@@ -62,43 +62,48 @@ namespace INFOMAA_Assignment
         {
             while (_clock < _gameLength)
             {
-                Console.WriteLine(_clock);
-                for (int i = 0; i < _numPlayers; i++)
-                {
-                    Console.WriteLine(_players[i].GetPosition());
-                    bool actionDone = false;
-                    List<int> tabooList = new List<int>();
-                    while (!actionDone)
-                    {
-                        int action = _players[i].GetAction(tabooList);
-                        if (action == -1)
-                        {
-                            throw new Exception("No suitable action found");
-                        }
-                        tabooList.Add(action);
-                        Position next = _torus.NextPosition(_players[i].GetPosition(), _speed, action);
-                        bool colission = false;
-                        for (int j = 0; j < _numPlayers; j++)
-                        {
-                            colission |= (i != j && IsCollision(next, _players[j]));
-                        }
-                        if (!colission)
-                        {
-                            actionDone = true;
-                            _logger.LogActionSet(_clock, i, _players[i].ActionSet);
-                            _players[i].SetPosition(next);
-                            _players[i].AddReward(action, _positiveReward);
-                        }
-                        else
-                        {
-                            _logger.LogCollision(_clock);
-                            _players[i].AddReward(action, _negativeReward);
-                        }
-                    }
-                }
-                _clock++;
+                Step();
             }
             _logger.Dump();
+        }
+
+        public void Step()
+        {
+            Console.WriteLine(_clock);
+            for (int i = 0; i < _numPlayers; i++)
+            {
+                Console.WriteLine(_players[i].GetPosition());
+                bool actionDone = false;
+                List<int> tabooList = new List<int>();
+                while (!actionDone)
+                {
+                    int action = _players[i].GetAction(tabooList);
+                    if (action == -1)
+                    {
+                        throw new Exception("No suitable action found");
+                    }
+                    tabooList.Add(action);
+                    Position next = _torus.NextPosition(_players[i].GetPosition(), _speed, action);
+                    bool colission = false;
+                    for (int j = 0; j < _numPlayers; j++)
+                    {
+                        colission |= (i != j && IsCollision(next, _players[j]));
+                    }
+                    if (!colission)
+                    {
+                        actionDone = true;
+                        _logger.LogActionSet(_clock, i, _players[i].ActionSet);
+                        _players[i].SetPosition(next);
+                        _players[i].AddReward(action, _positiveReward);
+                    }
+                    else
+                    {
+                        _logger.LogCollision(_clock);
+                        _players[i].AddReward(action, _negativeReward);
+                    }
+                }
+            }
+            _clock++;
         }
 
         private bool IsCollision(Position pos, Player player)
