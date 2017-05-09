@@ -16,11 +16,11 @@ namespace INFOMAA_Assignment
             int[] positiveRewards = { 1, 5, 100, 1000 };
             int[] negativeRewards = { -1, -5, -10, -100, -500, -1000 };
 
-            int numberOfPlayers = 300;
+            int numberOfPlayers = 400;
             int positiveReward = 1;
-            int negativeReward = -100;
+            int negativeReward = -10;
             int speed = 3;
-            int gameLength = 100;
+            int gameLength = 10000;
             Torus torus = new Torus(750, 750);
             ActionSet actionSet = new ActionSet(4);
             Distribution distribution = new Distribution(0.01, new Random(1));

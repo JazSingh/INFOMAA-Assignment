@@ -71,7 +71,7 @@ namespace INFOMAA_Assignment
         public void Dump()
         {
             Console.WriteLine("\nDumping scores per action per time step");
-            DumpScoresPerActionPerTimeStep();
+            //DumpScoresPerActionPerTimeStep();
             Console.WriteLine("Dumping collisions");
             DumpColissions();
         }

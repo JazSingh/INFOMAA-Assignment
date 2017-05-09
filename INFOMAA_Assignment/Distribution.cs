@@ -9,7 +9,7 @@ namespace INFOMAA_Assignment
 
         public Distribution(double epsilon, Random randomService)
         {
-            _distribution = new ContinuousUniform(0, 1, randomService);
+            _distribution = new ContinuousUniform(0, 99, randomService);
             _epsilon = epsilon;
         }
 
@@ -23,7 +23,7 @@ namespace INFOMAA_Assignment
         public ActionType Sample()
         {
             double sample = _distribution.Sample();
-            if (sample < _epsilon)
+            if (sample < _epsilon * 100)
             {
                 return ActionType.EXPLORE;
             }

@@ -1,12 +1,15 @@
 ﻿<Properties StartupConfiguration="{3659ACCF-BBE1-4A33-BBE5-6426D4546C36}|Default">
   <MonoDevelop.Ide.Workbench ActiveDocument="INFOMAA_Assignment/Distribution.cs">
     <Files>
-      <File FileName="INFOMAA_Assignment/Distribution.cs" Line="16" Column="57" />
+      <File FileName="INFOMAA_Assignment/Distribution.cs" Line="12" Column="57" />
       <File FileName="INFOMAA_Assignment/Game.cs" Line="9" Column="16" />
-      <File FileName="INFOMAA_Assignment/Logger.cs" Line="1" Column="1" />
+      <File FileName="INFOMAA_Assignment/Logger.cs" Line="74" Column="15" />
       <File FileName="INFOMAA_Assignment/packages.config" Line="1" Column="1" />
       <File FileName="INFOMAA_Assignment/ActionSet.cs" Line="1" Column="1" />
       <File FileName="INFOMAA_Assignment/ActionType.cs" Line="1" Column="1" />
+      <File FileName="INFOMAA_Assignment/Program.cs" Line="19" Column="38" />
+      <File FileName="INFOMAA_Assignment/Player.cs" Line="45" Column="23" />
+      <File FileName="UnitTests/TestDistribution.cs" Line="20" Column="52" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
