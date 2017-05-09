@@ -25,9 +25,9 @@ namespace INFOMAA_Assignment
             double sample = _distribution.Sample();
             if (sample < _epsilon)
             {
-                return ActionType.EXPLOIT;
+                return ActionType.EXPLORE;
             }
-            return ActionType.EXPLORE;
+            return ActionType.EXPLOIT;
         }
 
         public Random GetRandomService()

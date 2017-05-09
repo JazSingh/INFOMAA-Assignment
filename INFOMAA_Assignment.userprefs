@@ -1,19 +1,12 @@
 ﻿<Properties StartupConfiguration="{3659ACCF-BBE1-4A33-BBE5-6426D4546C36}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="INFOMAA_Assignment/Player.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="INFOMAA_Assignment/Distribution.cs">
     <Files>
-      <File FileName="UnitTests/TestTorus.cs" Line="7" Column="17" />
-      <File FileName="INFOMAA_Assignment/Torus.cs" Line="24" Column="16" />
-      <File FileName="INFOMAA_Assignment/Position.cs" Line="47" Column="2" />
       <File FileName="INFOMAA_Assignment/Distribution.cs" Line="16" Column="57" />
-      <File FileName="INFOMAA_Assignment/Program.cs" Line="1" Column="1" />
-      <File FileName="INFOMAA_Assignment/Logger.cs" Line="79" Column="49" />
-      <File FileName="INFOMAA_Assignment/Game.cs" Line="74" Column="45" />
-      <File FileName="INFOMAA_Assignment/ActionSet.cs" Line="26" Column="62" />
-      <File FileName="UnitTests/TestActionSet.cs" Line="10" Column="34" />
+      <File FileName="INFOMAA_Assignment/Game.cs" Line="9" Column="16" />
+      <File FileName="INFOMAA_Assignment/Logger.cs" Line="1" Column="1" />
+      <File FileName="INFOMAA_Assignment/packages.config" Line="1" Column="1" />
+      <File FileName="INFOMAA_Assignment/ActionSet.cs" Line="1" Column="1" />
       <File FileName="INFOMAA_Assignment/ActionType.cs" Line="1" Column="1" />
-      <File FileName="UnitTests/TestDistribution.cs" Line="2" Column="23" />
-      <File FileName="UnitTests/TestGame.cs" Line="4" Column="15" />
-      <File FileName="INFOMAA_Assignment/Player.cs" Line="42" Column="14" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
