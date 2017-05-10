@@ -63,7 +63,6 @@ namespace INFOMAA_Assignment
             while (_clock < _gameLength)
             {
                 Console.Write($"\rGametime: {_clock + 1} of {_gameLength} seconds");
-
                 Step();
             }
             _logger.Dump();
@@ -81,10 +80,7 @@ namespace INFOMAA_Assignment
             for (int i = 0; i < _numPlayers; i++)
             {
                 int action = _players[i].GetAction();
-                if (action == -1)
-                {
-                    throw new Exception("No suitable action found");
-                }
+
                 Position next = _torus.NextPosition(_players[i].GetPosition(), _speed, action);
                 bool colission = false;
 
@@ -102,12 +98,6 @@ namespace INFOMAA_Assignment
                 {
                     _logger.LogCollision(_clock);
                     _players[i].AddReward(action, _negativeReward);
-                }
-
-                // Initialize list of scores for this action
-                if (!rewardsPerAction.ContainsKey(action))
-                {
-                    rewardsPerAction.Add(action, new List<int>());
                 }
 
                 // Add score to list

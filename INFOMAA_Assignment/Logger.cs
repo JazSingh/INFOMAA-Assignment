@@ -15,7 +15,7 @@ namespace INFOMAA_Assignment
         int[] _colissionsPerTimeStep;
 
         int _numSteps;
-        int _numPlayers;
+        //int _numPlayers;
 
         private ActionSet _actionSet;
 
@@ -25,7 +25,7 @@ namespace INFOMAA_Assignment
         public Logger(int timeSteps, ActionSet actionSet, int numPlayers, string[] parameters)
         {
             _numSteps = timeSteps;
-            _numPlayers = numPlayers;
+            //_numPlayers = numPlayers;
             _actionSet = actionSet;
             _colissionsPerTimeStep = new int[timeSteps];
 
