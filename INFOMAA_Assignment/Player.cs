@@ -52,7 +52,7 @@ namespace INFOMAA_Assignment
         }
 
         /// <summary>
-        /// Gets the action based on the porbability distribution
+        /// Gets the action based on the probability distribution
         /// </summary>
         /// <returns>The action to perform.</returns>
         public int GetAction()

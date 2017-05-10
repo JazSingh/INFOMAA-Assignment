@@ -98,6 +98,7 @@ namespace INFOMAA_Assignment
                 for (int j = 0; j < _numPlayers; j++)
                 {
                     colission |= (i != j && IsCollision(next, _players[j]));
+                    if (colission) break;
                 }
 
                 if (!colission)
