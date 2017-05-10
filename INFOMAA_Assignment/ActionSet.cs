@@ -5,18 +5,28 @@ using System.Linq;
 
 namespace INFOMAA_Assignment
 {
+    /// <summary>
+    /// Action set which represents the set of scores with their
+    /// associated payoffs.
+    /// </summary>
     public class ActionSet : IDictionary<int, int>
     {
         Dictionary<int, int> _actionPayoff;
         int _numActions;
         int _bestAction = 0;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:INFOMAA_Assignment.ActionSet"/> class
+        ///     from the number of possible actions.
+        /// </summary>
+        /// <param name="numActions">Number actions.</param>
         public ActionSet(int numActions)
         {
             _numActions = numActions;
             _actionPayoff = new Dictionary<int, int>();
             int direction = 0;
             int step = 360 / numActions;
+            // create actions
             while (direction < 360)
             {
                 _actionPayoff.Add(direction, 0);
@@ -26,12 +36,20 @@ namespace INFOMAA_Assignment
 
         public int NumActions => _numActions;
 
+        /// <summary>
+        /// Create a copy where all payoffs are set to 0.
+        /// </summary>
+        /// <returns>The copy.</returns>
         public ActionSet CleanCopy()
         {
             ActionSet cleanCopy = new ActionSet(_numActions);
             return cleanCopy;
         }
 
+        /// <summary>
+        /// Clone this instance.
+        /// </summary>
+        /// <returns>The clone.</returns>
         public ActionSet Clone()
         {
             ActionSet clone = CleanCopy();
@@ -57,6 +75,7 @@ namespace INFOMAA_Assignment
             set
             {
                 _actionPayoff[key] = value;
+                // update best action.
                 if (value > _actionPayoff[_bestAction])
                     _bestAction = key;
             }

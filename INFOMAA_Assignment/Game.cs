@@ -22,6 +22,7 @@ namespace INFOMAA_Assignment
 
         public Game(Torus torus, int numPlayers, ActionSet actionSet, int colissionRadius, int positiveReward, int negativeReward, int speed, Distribution distribution, int gameLength)
         {
+            // Init parameters
             _clock = 0;
             _gameLength = gameLength;
 
@@ -34,6 +35,7 @@ namespace INFOMAA_Assignment
             _numPlayers = numPlayers;
             _speed = speed;
 
+            // Create players
             _players = new Player[numPlayers];
             for (int i = 0; i < numPlayers; i++)
             {
@@ -44,6 +46,7 @@ namespace INFOMAA_Assignment
                 _players[i].SetPosition(new Position(x, y));
             }
 
+            // Setup logger with parameters
             _logger = new Logger(gameLength, actionSet.CleanCopy(), numPlayers, new[]{
                 torus.Width.ToString(),
                 torus.Height.ToString(),
@@ -57,6 +60,9 @@ namespace INFOMAA_Assignment
             });
         }
 
+        /// <summary>
+        /// Start the game.
+        /// </summary>
         public void Start()
         {
             Console.WriteLine("{0}-", _logger._parameters);
@@ -68,10 +74,14 @@ namespace INFOMAA_Assignment
             _logger.Dump();
         }
 
+        /// <summary>
+        /// Perform a single step in the game.
+        /// </summary>
         public void Step()
         {
             Dictionary<int, List<int>> rewardsPerAction = new Dictionary<int, List<int>>();
 
+            // init list of actions to log
             foreach (var action in _actionSet.Keys)
             {
                 rewardsPerAction.Add(action, new List<int>());
@@ -84,18 +94,19 @@ namespace INFOMAA_Assignment
                 Position next = _torus.NextPosition(_players[i].GetPosition(), _speed, action);
                 bool colission = false;
 
+                // Check for colissions
                 for (int j = 0; j < _numPlayers; j++)
                 {
                     colission |= (i != j && IsCollision(next, _players[j]));
                 }
 
                 if (!colission)
-                {
+                { // if there is NO colission, add the positive reward and move the player
                     _players[i].SetPosition(next);
                     _players[i].AddReward(action, _positiveReward);
                 }
                 else
-                {
+                { // if there is a colission, add a negative reward to the action
                     _logger.LogCollision(_clock);
                     _players[i].AddReward(action, _negativeReward);
                 }
@@ -109,6 +120,12 @@ namespace INFOMAA_Assignment
             _clock++;
         }
 
+        /// <summary>
+        /// Checks for a colission based on the position and the position of the other player
+        /// </summary>
+        /// <returns><c>true</c>, if collision a would occur, <c>false</c> otherwise.</returns>
+        /// <param name="pos">Position.</param>
+        /// <param name="player">Player.</param>
         private bool IsCollision(Position pos, Player player)
         {
             return Math.Sqrt((player.GetPosition().X - pos.X) * (player.GetPosition().X - pos.X) + (player.GetPosition().Y - pos.Y) * (player.GetPosition().Y - pos.Y)) < _colissionRadius;
