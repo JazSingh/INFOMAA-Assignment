@@ -131,5 +131,7 @@ namespace INFOMAA_Assignment
         {
             return Math.Sqrt((player.GetPosition().X - pos.X) * (player.GetPosition().X - pos.X) + (player.GetPosition().Y - pos.Y) * (player.GetPosition().Y - pos.Y)) < _colissionRadius;
         }
+
+        public Logger Logger { get { return _logger; } }
     }
 }

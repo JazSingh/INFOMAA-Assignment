@@ -43,6 +43,8 @@ namespace INFOMAA_Assignment
             _hashcode = DateTime.Now.GetHashCode().ToString("x8");
         }
 
+        public int[] Collisions { get { return _colissionsPerTimeStep; } }
+
         public void LogCollision(int timeStep)
         {
             _colissionsPerTimeStep[timeStep]++;

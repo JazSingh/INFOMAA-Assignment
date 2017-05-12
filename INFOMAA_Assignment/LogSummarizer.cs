@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace INFOMAA_Assignment
 {
@@ -15,19 +16,31 @@ namespace INFOMAA_Assignment
             _logs = new List<Logger>();
         }
 
-        public void AddLog(Logger log)
+        public void AddLog(Logger log) { _logs.Add(log); }
+
+        public void SetLogs(List<Logger> logs) { _logs = logs; }
+
+        public void DumpCollissionSummary()
         {
-            _logs.Add(log);
+            Console.WriteLine("Creating and dumping colission summary");
+            int gameLength = _logs[0].Collisions.Length;
+            string[] summary = new string[gameLength];
+            for (int i = 0; i < gameLength; i++)
+                summary[i] = CreateCollisionEntry(i);
+            File.WriteAllLines($"{DateTime.Now.ToShortDateString().Replace('/', '-')}-{DateTime.Now.TimeOfDay.ToString("")}-{_summaryName}-.csv", summary);
         }
 
-        public void CreateCollissionSummary()
+        private string CreateCollisionEntry(int i)
         {
-
+            string entry = "";
+            foreach (Logger logger in _logs)
+                entry += $"{logger.Collisions[i]};";
+            return $"{entry.Remove(entry.Length - 1)}\n";
         }
 
         public void CreateScoreSummary()
         {
-
+            //TODO
         }
     }
 }

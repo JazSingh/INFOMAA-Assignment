@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace INFOMAA_Assignment
@@ -19,6 +20,7 @@ namespace INFOMAA_Assignment
             int[] speeds = { 2, 3, 5, 8 }; // 4 
             double[] epsilons = { 0.001d, 0.01d, 0.05d, 0.1d }; // 4
 
+            LogSummarizer summarizer = new LogSummarizer("k", "k");
             foreach (int k in ks)
             {
                 int numberOfPlayers = 66;
@@ -32,8 +34,10 @@ namespace INFOMAA_Assignment
 
                 Game game = new Game(torus, numberOfPlayers, actionSet, (int)(2 * speed), positiveReward, negativeReward, speed, distribution, gameLength);
                 game.Start();
+                summarizer.AddLog(game.Logger);
                 Console.WriteLine("Done");
             }
+            summarizer.DumpCollissionSummary();
             Console.WriteLine("Run finished, press any key to terminate...");
             Console.ReadLine();
         }
