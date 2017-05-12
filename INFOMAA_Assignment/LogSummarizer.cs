@@ -27,7 +27,7 @@ namespace INFOMAA_Assignment
             string[] summary = new string[gameLength];
             for (int i = 0; i < gameLength; i++)
                 summary[i] = CreateCollisionEntry(i);
-            File.WriteAllLines($"{DateTime.Now.ToShortDateString().Replace('/', '-')}-{DateTime.Now.TimeOfDay.ToString("")}-{_summaryName}-.csv", summary);
+            File.WriteAllLines($"{DateTime.Now.ToShortDateString().Replace('/', '-')}-{DateTime.Now.TimeOfDay.ToString("g").Replace(':', '-')}-{_summaryName}-.csv", summary);
         }
 
         private string CreateCollisionEntry(int i)
