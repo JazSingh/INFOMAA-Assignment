@@ -25,7 +25,6 @@ namespace INFOMAA_Assignment
         public Logger(int timeSteps, ActionSet actionSet, Dictionary<string, string> parameters)
         {
             _numSteps = timeSteps;
-            //_numPlayers = numPlayers;
             _actionSet = actionSet;
             _colissionsPerTimeStep = new int[timeSteps];
 
