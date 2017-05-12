@@ -46,6 +46,7 @@
     <Compile Include="Distribution.cs" />
     <Compile Include="ActionType.cs" />
     <Compile Include="Logger.cs" />
+    <Compile Include="LogSummarizer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

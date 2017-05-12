@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace INFOMAA_Assignment
 {
@@ -20,11 +21,11 @@ namespace INFOMAA_Assignment
 
             foreach (int k in ks)
             {
-                int numberOfPlayers = 100;
+                int numberOfPlayers = 66;
                 int positiveReward = 5;
                 int negativeReward = -10;
                 int speed = 3;
-                int gameLength = 100000;
+                int gameLength = 4000;
                 Torus torus = new Torus(250, 250);
                 ActionSet actionSet = new ActionSet(k);
                 Distribution distribution = new Distribution(0.01, new Random(k * (numberOfPlayers + positiveReward + negativeReward + speed + gameLength + torus.Height + torus.Width)));
@@ -33,7 +34,7 @@ namespace INFOMAA_Assignment
                 game.Start();
                 Console.WriteLine("Done");
             }
-
+            Console.WriteLine("Run finished, press any key to terminate...");
             Console.ReadLine();
         }
     }
