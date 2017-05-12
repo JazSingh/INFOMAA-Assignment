@@ -34,18 +34,42 @@ namespace INFOMAA_Assignment
             paramMap = parameters;
             _parameters = "";
             foreach (KeyValuePair<string, string> parameter in parameters)
+            {
                 _parameters += $"{parameter.Key}{parameter.Value}";
+            }
 
             _hashcode = DateTime.Now.GetHashCode().ToString("x8");
+        }
+
+        public List<int> GetActions()
+        {
+            return _actionSet.Keys.ToList();
+        }
+
+        public List<double> GetMeansOfAction(int actionKey)
+        {
+            return _meanPerTimeStep[actionKey];
         }
 
         public int[] Collisions { get { return _colissionsPerTimeStep; } }
 
         public string Parameters { get { return _parameters; } }
 
-        public string GetParameter(string parameter)
+        public string GetParameterKey(string value)
         {
-            return paramMap[parameter];
+            foreach (string key in paramMap.Keys)
+            {
+                if (paramMap[key] == value)
+                {
+                    return key;
+                }
+            }
+            return null;
+        }
+
+        public string GetParameterValue(string key)
+        {
+            return paramMap[key];
         }
 
         public void LogCollision(int timeStep)

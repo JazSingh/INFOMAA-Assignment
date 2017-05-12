@@ -1,21 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using MathNet.Numerics.Distributions;
 
 namespace INFOMAA_Assignment
 {
     // Creates useful summaries from a series of logs
     public class LogSummarizer
     {
-        string _summaryName;
-        string _param;
+        readonly string _summaryName;
+        readonly string _testedParamName;
+        readonly string _testedParamValue;
+        readonly string _variatedParamName;
 
         List<Logger> _logs;
 
-        public LogSummarizer(string name, string testedParam)
+        public LogSummarizer(string testedParamName, string testedParamValue, string variatedParam)
         {
-            _summaryName = $"{name}-{testedParam}";
-            _param = testedParam;
+            _testedParamName = testedParamName;
+            _testedParamValue = testedParamValue;
+            _summaryName = $"{_testedParamName}-{_testedParamValue}";
+            _variatedParamName = variatedParam;
             _logs = new List<Logger>();
         }
 
@@ -27,31 +33,101 @@ namespace INFOMAA_Assignment
         {
             Console.WriteLine("Creating and dumping colission summary");
             int gameLength = _logs[0].Collisions.Length;
-            string[] summary = new string[gameLength];
+
+            var summary = new List<string>();
+            summary.Add(CreateParameterheader());
+            summary.Add(CreateCollisionColumnNames());
             for (int i = 0; i < gameLength; i++)
-                summary[i] = CreateCollisionEntry(i);
-            File.WriteAllLines($"{DateTime.Now.ToShortDateString().Replace('/', '-')}-{DateTime.Now.TimeOfDay.ToString("g").Replace(':', '-')}-{_summaryName}-.csv", summary);
+            {
+                summary.Add(CreateCollisionEntry(i));
+            }
+            File.WriteAllLines($"{DateTime.Now.ToShortDateString().Replace('/', '-')}-{DateTime.Now.TimeOfDay.ToString("g").Replace(':', '-')}-{_summaryName}-collisions.csv", summary);
         }
 
-        private string CreateCollisionheader()
+        public void DumpScoreSummary()
         {
-            string header = "";
-            foreach (Logger logger in _logs) // zonder spaties voor matlab :)
-                header += $"_param{logger.GetParameter(_param)}";
-            return $"{header.Remove(header.Length - 1)}\n";
+            Console.WriteLine("Creating and dumping score summary");
+            int gameLength = _logs[0].Collisions.Length;
+
+            var summary = new List<string>();
+            summary.Add(CreateParameterheader());
+            summary.Add(CreateScoreColumnNames());
+            summary.Add(CreateActionColumnNames());
+            for (int timeStep = 0; timeStep < gameLength; timeStep++)
+            {
+                summary.Add(CreateScoreEntry(timeStep));
+            }
+            File.WriteAllLines($"{DateTime.Now.ToShortDateString().Replace('/', '-')}-{DateTime.Now.TimeOfDay.ToString("g").Replace(':', '-')}-{_summaryName}-scores.csv", summary);
         }
 
-        private string CreateCollisionEntry(int i)
+        private string CreateParameterheader()
         {
-            string entry = "";
+            return $"Tested Parameter:{_testedParamName} = {_testedParamValue}, variated Parameter: {_variatedParamName}";
+        }
+
+        private string CreateCollisionColumnNames()
+        {
+            string header = "time;";
             foreach (Logger logger in _logs)
-                entry += $"{logger.Collisions[i]};";
-            return $"{entry.Remove(entry.Length - 1)}\n";
+            {
+                header += $"{_variatedParamName} = {logger.GetParameterValue(_variatedParamName)};";
+            }
+            return header;
         }
 
-        public void CreateScoreSummary()
+        private string CreateScoreColumnNames()
         {
-            //TODO
+            string header = ";";
+            foreach (Logger logger in _logs)
+            {
+                var numOfActions = logger.GetActions().Count;
+                header += $"{_variatedParamName} = {logger.GetParameterValue(_variatedParamName)};";
+                header += new string(';', numOfActions);
+            }
+            return header;
+        }
+
+        private string CreateActionColumnNames()
+        {
+            string header = "time;";
+            foreach (Logger logger in _logs)
+            {
+                var actions = logger.GetActions();
+                foreach (var action in actions)
+                {
+                    header += $"{action};";
+                }
+                header += ";";
+            }
+            return header;
+        }
+
+        private string CreateCollisionEntry(int timeStep)
+        {
+            string entry = $"{timeStep + 1};";
+            foreach (Logger logger in _logs)
+            {
+                entry += $"{logger.Collisions[timeStep]};";
+            }
+            return $"{entry.Remove(entry.Length - 1)}";
+        }
+
+        private string CreateScoreEntry(int timeStep)
+        {
+            string entry = $"{timeStep + 1};";
+            foreach (Logger logger in _logs)
+            {
+                var actions = logger.GetActions();
+                foreach (var action in actions)
+                {
+                    var means = logger.GetMeansOfAction(action);
+                    var meanOfThisTimeStep = means[timeStep];
+                    entry += $"{meanOfThisTimeStep};";
+
+                }
+                entry += ";";
+            }
+            return $"{entry.Remove(entry.Length - 1)}";
         }
     }
 }

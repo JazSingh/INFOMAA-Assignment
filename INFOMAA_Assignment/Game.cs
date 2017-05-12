@@ -48,15 +48,15 @@ namespace INFOMAA_Assignment
 
             // Setuplogger with parameters
             Dictionary<string, string> parameters = new Dictionary<string, string>();
-            parameters.Add("W", torus.Width.ToString());
-            parameters.Add("H", torus.Height.ToString());
-            parameters.Add("N", numPlayers.ToString());
-            parameters.Add("k", actionSet.NumActions.ToString());
-            parameters.Add("C", colissionRadius.ToString());
-            parameters.Add("d", speed.ToString());
-            parameters.Add("Rp", positiveReward.ToString());
-            parameters.Add("Rn", negativeReward.ToString());
-            parameters.Add("e", $"{distribution.Epsilon:0.000}");
+            parameters.Add(ParamNameConstants.WIDTH, torus.Width.ToString());
+            parameters.Add(ParamNameConstants.HEIGHT, torus.Height.ToString());
+            parameters.Add(ParamNameConstants.NUMPLAYERS, numPlayers.ToString());
+            parameters.Add(ParamNameConstants.NUMACTIONS, actionSet.NumActions.ToString());
+            parameters.Add(ParamNameConstants.COLLISIONRADIUS, colissionRadius.ToString());
+            parameters.Add(ParamNameConstants.SPEED, speed.ToString());
+            parameters.Add(ParamNameConstants.POSREWARD, positiveReward.ToString());
+            parameters.Add(ParamNameConstants.NEGREWARD, negativeReward.ToString());
+            parameters.Add(ParamNameConstants.EPSILON, $"{distribution.Epsilon:0.000}");
 
             _logger = new Logger(gameLength, actionSet.CleanCopy(), parameters);
 
