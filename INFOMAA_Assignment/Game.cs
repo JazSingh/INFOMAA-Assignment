@@ -46,18 +46,20 @@ namespace INFOMAA_Assignment
                 _players[i].SetPosition(new Position(x, y));
             }
 
-            // Setup logger with parameters
-            _logger = new Logger(gameLength, actionSet.CleanCopy(), numPlayers, new[]{
-                torus.Width.ToString(),
-                torus.Height.ToString(),
-                numPlayers.ToString(),
-                actionSet.NumActions.ToString(),
-                colissionRadius.ToString(),
-                speed.ToString(),
-                positiveReward.ToString(),
-                negativeReward.ToString(),
-                $"{distribution.Epsilon:0.000}"
-            });
+            // Setuplogger with parameters
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            parameters.Add("W", torus.Width.ToString());
+            parameters.Add("H", torus.Height.ToString());
+            parameters.Add("N", numPlayers.ToString());
+            parameters.Add("k", actionSet.NumActions.ToString());
+            parameters.Add("C", colissionRadius.ToString());
+            parameters.Add("d", speed.ToString());
+            parameters.Add("Rp", positiveReward.ToString());
+            parameters.Add("Rn", negativeReward.ToString());
+            parameters.Add("e", $"{distribution.Epsilon:0.000}");
+
+            _logger = new Logger(gameLength, actionSet.CleanCopy(), parameters);
+
         }
 
         /// <summary>
@@ -65,13 +67,13 @@ namespace INFOMAA_Assignment
         /// </summary>
         public void Start()
         {
-            Console.WriteLine("{0}-", _logger._parameters);
+            Console.WriteLine("{0}-", _logger.Parameters);
             while (_clock < _gameLength)
             {
                 Console.Write($"\rGametime: {_clock + 1} of {_gameLength} seconds");
                 Step();
             }
-            _logger.Dump();
+            //_logger.Dump();
         }
 
         /// <summary>

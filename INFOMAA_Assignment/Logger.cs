@@ -15,14 +15,14 @@ namespace INFOMAA_Assignment
         int[] _colissionsPerTimeStep;
 
         int _numSteps;
-        //int _numPlayers;
 
         private ActionSet _actionSet;
 
         string _hashcode;
-        public string _parameters;
+        private string _parameters;
+        private Dictionary<string, string> paramMap;
 
-        public Logger(int timeSteps, ActionSet actionSet, int numPlayers, string[] parameters)
+        public Logger(int timeSteps, ActionSet actionSet, Dictionary<string, string> parameters)
         {
             _numSteps = timeSteps;
             //_numPlayers = numPlayers;
@@ -30,20 +30,24 @@ namespace INFOMAA_Assignment
             _colissionsPerTimeStep = new int[timeSteps];
 
             foreach (int degrees in _actionSet.Keys)
-            {
                 _meanPerTimeStep.Add(degrees, new List<double>());
-            }
 
+            paramMap = parameters;
             _parameters = "";
-            foreach (string parameter in parameters)
-            {
-                _parameters += $"-{parameter}";
-            }
+            foreach (KeyValuePair<string, string> parameter in parameters)
+                _parameters += $"{parameter.Key}{parameter.Value}";
 
             _hashcode = DateTime.Now.GetHashCode().ToString("x8");
         }
 
         public int[] Collisions { get { return _colissionsPerTimeStep; } }
+
+        public string Parameters { get { return _parameters; } }
+
+        public string GetParameter(string parameter)
+        {
+            return paramMap[parameter];
+        }
 
         public void LogCollision(int timeStep)
         {
@@ -56,16 +60,12 @@ namespace INFOMAA_Assignment
             {
                 double sum = 0;
                 foreach (int score in meanRewardPerAction[action])
-                {
                     sum += score;
-                }
 
                 double mean = 0;
 
                 if (meanRewardPerAction[action].Count > 0)
-                {
                     mean = sum / meanRewardPerAction[action].Count;
-                }
                 _meanPerTimeStep[action].Add(mean);
             }
         }
@@ -85,9 +85,7 @@ namespace INFOMAA_Assignment
             {
                 List<double> meansPerAction = new List<double>();
                 foreach (KeyValuePair<int, List<double>> kvp in _meanPerTimeStep)
-                {
                     meansPerAction.Add(kvp.Value[i - 1]);
-                }
                 entries[i] += CreateEntry(i, meansPerAction);
             }
             File.WriteAllLines(_hashcode + _parameters + "_result.csv", entries);
@@ -97,9 +95,7 @@ namespace INFOMAA_Assignment
         {
             string entry = $"{timeStep}";
             foreach (double mean in meansPerAction)
-            {
                 entry += $";{mean:0.000}";
-            }
             entry += $";{_colissionsPerTimeStep[timeStep - 1]}";
             return entry;
         }
@@ -108,9 +104,7 @@ namespace INFOMAA_Assignment
         {
             string header = "time";
             foreach (KeyValuePair<int, int> kvp in actionSet)
-            {
-                header += $";action {kvp.Key} degrees";
-            }
+                header += $";action{kvp.Key}degrees"; // zonder spaties voor matlab :)
             header += $";collisions";
             return header;
         }
