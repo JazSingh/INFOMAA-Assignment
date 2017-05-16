@@ -55,17 +55,7 @@ namespace INFOMAA_Assignment
 
         public string Parameters { get { return _parameters; } }
 
-        public string GetParameterKey(string value)
-        {
-            foreach (string key in paramMap.Keys)
-            {
-                if (paramMap[key] == value)
-                {
-                    return key;
-                }
-            }
-            return null;
-        }
+
 
         public string GetParameterValue(string key)
         {

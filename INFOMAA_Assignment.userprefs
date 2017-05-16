@@ -1,18 +1,19 @@
 ﻿<Properties StartupConfiguration="{3659ACCF-BBE1-4A33-BBE5-6426D4546C36}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="INFOMAA_Assignment/LogSummarizer.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="INFOMAA_Assignment/ParamNameConstants.cs">
     <Files>
       <File FileName="INFOMAA_Assignment/Distribution.cs" Line="30" Column="52" />
-      <File FileName="INFOMAA_Assignment/Game.cs" Line="107" Column="50" />
-      <File FileName="INFOMAA_Assignment/Logger.cs" Line="18" Column="27" />
+      <File FileName="INFOMAA_Assignment/Game.cs" Line="1" Column="1" />
+      <File FileName="INFOMAA_Assignment/Logger.cs" Line="57" Column="9" />
       <File FileName="INFOMAA_Assignment/packages.config" Line="1" Column="1" />
       <File FileName="INFOMAA_Assignment/ActionSet.cs" Line="78" Column="39" />
       <File FileName="INFOMAA_Assignment/ActionType.cs" Line="1" Column="1" />
-      <File FileName="INFOMAA_Assignment/Program.cs" Line="14" Column="13" />
+      <File FileName="INFOMAA_Assignment/Program.cs" Line="1" Column="1" />
       <File FileName="INFOMAA_Assignment/Player.cs" Line="47" Column="10" />
       <File FileName="UnitTests/TestDistribution.cs" Line="20" Column="52" />
       <File FileName="INFOMAA_Assignment/Torus.cs" Line="42" Column="54" />
       <File FileName="INFOMAA_Assignment/Position.cs" Line="1" Column="1" />
-      <File FileName="INFOMAA_Assignment/LogSummarizer.cs" Line="4" Column="25" />
+      <File FileName="INFOMAA_Assignment/LogSummarizer.cs" Line="28" Column="46" />
+      <File FileName="INFOMAA_Assignment/ParamNameConstants.cs" Line="9" Column="18" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
