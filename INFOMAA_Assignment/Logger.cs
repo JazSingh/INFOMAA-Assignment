@@ -62,11 +62,11 @@ namespace INFOMAA_Assignment
             set => _colissionsPerTimeStep = value;
         }
 
-		public double[,] NumActionPlayed
-		{
+        public double[,] NumActionPlayed
+        {
             get => _numPlayerPlayedActionPerTimeStep;
-			set => _numPlayerPlayedActionPerTimeStep = value;
-		}
+            set => _numPlayerPlayedActionPerTimeStep = value;
+        }
 
         public string Parameters => _parameterString;
         public ParameterSettings ParameterSettings => _parameters;
@@ -122,7 +122,7 @@ namespace INFOMAA_Assignment
             string entry = string.Empty;
             for (int action = 0; action < _meanPayoffPerTimeStep.GetLength(1); action++)
             {
-                double avgScore = _numPlayerPlayedActionPerTimeStep[timeStep, action] < double.Epsilon ? 0 :_meanPayoffPerTimeStep[timeStep, action]
+                double avgScore = _numPlayerPlayedActionPerTimeStep[timeStep, action] < double.Epsilon ? 0 : _meanPayoffPerTimeStep[timeStep, action]
                     / _numPlayerPlayedActionPerTimeStep[timeStep, action];
                 entry += $"{avgScore:0.0000};";
             }
@@ -138,31 +138,31 @@ namespace INFOMAA_Assignment
             return header.Remove(header.Length - 1);
         }
 
-		// Flush contents of log to file.
-		public void FlushNumActionPlayedToFile(string subDirectory, string independentVariable)
-		{
-			string[] entries = new string[_numSteps + 1];
-			entries[0] = CreateHeader(_actionSet);
-			for (int i = 1; i <= _numSteps; i++)
+        // Flush contents of log to file.
+        public void FlushNumActionPlayedToFile(string subDirectory, string independentVariable)
+        {
+            string[] entries = new string[_numSteps + 1];
+            entries[0] = CreateHeader(_actionSet);
+            for (int i = 1; i <= _numSteps; i++)
                 entries[i] += CreateNumActionEntry(i - 1);
 
-			string directory = Path.Combine(_sessionHash, subDirectory);
-			Directory.CreateDirectory(directory);
+            string directory = Path.Combine(_sessionHash, subDirectory);
+            Directory.CreateDirectory(directory);
 
-			string varVal = independentVariable == "summary" ? "_summary" : _paramMap[independentVariable];
-			string fileName = $"{_parameters.ParameterBaselineType}_{independentVariable}{varVal}_NumActionPlayed.csv";
+            string varVal = independentVariable == "summary" ? "_summary" : _paramMap[independentVariable];
+            string fileName = $"{_parameters.ParameterBaselineType}_{independentVariable}{varVal}_NumActionPlayed.csv";
 
-			string outputFile = Path.Combine(directory, fileName);
-			File.WriteAllLines(outputFile, entries);
-		}
+            string outputFile = Path.Combine(directory, fileName);
+            File.WriteAllLines(outputFile, entries);
+        }
 
-		// A single row in the output file
-		string CreateNumActionEntry(int timeStep)
-		{
-			string entry = string.Empty;
-			for (int action = 0; action < _numPlayerPlayedActionPerTimeStep.GetLength(1); action++)
-				entry += $"{_numPlayerPlayedActionPerTimeStep[timeStep, action]};";
-			return entry.Remove(entry.Length - 1);
-		}
+        // A single row in the output file
+        string CreateNumActionEntry(int timeStep)
+        {
+            string entry = string.Empty;
+            for (int action = 0; action < _numPlayerPlayedActionPerTimeStep.GetLength(1); action++)
+                entry += $"{_numPlayerPlayedActionPerTimeStep[timeStep, action]};";
+            return entry.Remove(entry.Length - 1);
+        }
     }
 }

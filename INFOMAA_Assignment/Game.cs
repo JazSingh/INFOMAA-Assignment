@@ -90,14 +90,14 @@ namespace INFOMAA_Assignment
                 { // if there is NO colission, add the positive reward and move the player
                     _players[i].SetPosition(next);
                     _players[i].AddReward(action, _positiveReward);
-					_logger.LogAction(_clock, action, _positiveReward);
-				}
+                    _logger.LogAction(_clock, action, _positiveReward);
+                }
                 else
                 { // if there is a colission, add a negative reward to the action
                     _players[i].AddReward(action, _negativeReward);
-					_logger.LogCollision(_clock);
-					_logger.LogAction(_clock, action, _negativeReward);
-				}
+                    _logger.LogCollision(_clock);
+                    _logger.LogAction(_clock, action, _negativeReward);
+                }
             }
             _clock++;
         }

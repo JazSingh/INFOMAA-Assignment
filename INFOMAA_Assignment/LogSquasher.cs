@@ -51,15 +51,15 @@ namespace INFOMAA_Assignment
             return squashedScores;
         }
 
-		double[,] SquashNumActionPlayed(double divisor)
-		{
-			double[,] squashedScores = new double[_timesteps, _actionSet.Keys.Count];
-			foreach (Logger log in _logs)
-				for (int i = 0; i < _timesteps; i++)
-					for (int j = 0; j < _actionSet.Keys.Count; j++)
+        double[,] SquashNumActionPlayed(double divisor)
+        {
+            double[,] squashedScores = new double[_timesteps, _actionSet.Keys.Count];
+            foreach (Logger log in _logs)
+                for (int i = 0; i < _timesteps; i++)
+                    for (int j = 0; j < _actionSet.Keys.Count; j++)
                         squashedScores[i, j] += log.NumActionPlayed[i, j] / divisor;
 
-			return squashedScores;
-		}
+            return squashedScores;
+        }
     }
 }

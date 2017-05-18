@@ -61,18 +61,18 @@ namespace INFOMAA_Assignment
 
         public int GetBestAction(Random randomService)
         {
-			var best = new KeyValuePair<int, int>(-1, int.MinValue);
-			foreach (KeyValuePair<int, int> kvp in _actionPayoff)
-			{
+            var best = new KeyValuePair<int, int>(-1, int.MinValue);
+            foreach (KeyValuePair<int, int> kvp in _actionPayoff)
+            {
                 if (kvp.Value > best.Value)
-					best = kvp;
-			}
-            if(best.Key == 0)
+                    best = kvp;
+            }
+            if (best.Key == 0)
             {
                 int action = randomService.Next(0, _numActions);
-				return Keys.ToArray()[action];
+                return Keys.ToArray()[action];
             }
-            return best.Key;        
+            return best.Key;
         }
 
         public int this[int key]

@@ -1,23 +1,26 @@
 ﻿<Properties StartupConfiguration="{3659ACCF-BBE1-4A33-BBE5-6426D4546C36}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="UnitTests/TestTorus.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="INFOMAA_Assignment/Torus.cs">
     <Files>
-      <File FileName="INFOMAA_Assignment/Program.cs" Line="45" Column="41" />
-      <File FileName="INFOMAA_Assignment/Game.cs" Line="99" Column="55" />
-      <File FileName="INFOMAA_Assignment/Logger.cs" Line="127" Column="44" />
-      <File FileName="INFOMAA_Assignment/LogSquasher.cs" Line="26" Column="56" />
-      <File FileName="INFOMAA_Assignment/LogSummarizer.cs" Line="79" Column="43" />
-      <File FileName="INFOMAA_Assignment/ActionSet.cs" Line="66" Column="5" />
-      <File FileName="INFOMAA_Assignment/Player.cs" Line="65" Column="1" />
-      <File FileName="INFOMAA_Assignment/ParameterBaseline.cs" Line="16" Column="35" />
-      <File FileName="INFOMAA_Assignment/ParameterSettings.cs" Line="34" Column="37" />
-      <File FileName="INFOMAA_Assignment/ParameterBaselineType.cs" Line="8" Column="45" />
-      <File FileName="INFOMAA_Assignment/ParamNameConstants.cs" Line="14" Column="26" />
-      <File FileName="INFOMAA_Assignment/Torus.cs" Line="51" Column="1" />
-      <File FileName="INFOMAA_Assignment/Distribution.cs" Line="47" Column="1" />
+      <File FileName="INFOMAA_Assignment/Program.cs" Line="22" Column="14" />
+      <File FileName="INFOMAA_Assignment/Game.cs" Line="68" Column="9" />
+      <File FileName="INFOMAA_Assignment/Logger.cs" Line="128" Column="14" />
+      <File FileName="INFOMAA_Assignment/LogSquasher.cs" Line="40" Column="27" />
+      <File FileName="INFOMAA_Assignment/LogSummarizer.cs" Line="78" Column="1" />
+      <File FileName="INFOMAA_Assignment/ActionSet.cs" Line="26" Column="14" />
+      <File FileName="INFOMAA_Assignment/Player.cs" Line="64" Column="16" />
+      <File FileName="INFOMAA_Assignment/ParameterBaseline.cs" Line="18" Column="17" />
+      <File FileName="INFOMAA_Assignment/ParameterSettings.cs" Line="38" Column="10" />
+      <File FileName="INFOMAA_Assignment/ParameterBaselineType.cs" Line="11" Column="1" />
+      <File FileName="INFOMAA_Assignment/ParamNameConstants.cs" Line="18" Column="20" />
+      <File FileName="INFOMAA_Assignment/Torus.cs" Line="30" Column="23" />
+      <File FileName="INFOMAA_Assignment/Distribution.cs" Line="16" Column="10" />
       <File FileName="UnitTests/TestActionSet.cs" Line="1" Column="1" />
       <File FileName="UnitTests/TestDistribution.cs" Line="1" Column="1" />
       <File FileName="UnitTests/TestGame.cs" Line="1" Column="1" />
-      <File FileName="UnitTests/TestTorus.cs" Line="1" Column="1" />
+      <File FileName="UnitTests/TestTorus.cs" Line="71" Column="53" />
+      <File FileName="INFOMAA_Assignment/ActionType.cs" Line="9" Column="1" />
+      <File FileName="INFOMAA_Assignment/packages.config" Line="4" Column="12" />
+      <File FileName="INFOMAA_Assignment/Position.cs" Line="13" Column="9" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

@@ -44,6 +44,5 @@ namespace INFOMAA_Assignment
 
             return settings;
         }
-
     }
 }

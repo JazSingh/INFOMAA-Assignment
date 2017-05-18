@@ -15,7 +15,7 @@ namespace INFOMAA_Assignment
 
         public LogSummarizer(string independentVariable, string sessionHash)
         {
-			_summaryName = $"{independentVariable}";
+            _summaryName = $"{independentVariable}";
             _sessionHash = sessionHash;
             _independentVariable = independentVariable;
             _logs = new List<Logger>();
@@ -25,14 +25,14 @@ namespace INFOMAA_Assignment
 
         public void SetLogs(List<Logger> logs) { _logs = logs; }
 
-		public void FlushAll()
-		{
-			FlushCollissionSummary();
+        public void FlushAll()
+        {
+            FlushCollissionSummary();
             FlushScoreSummary();
             FlushNumActionPlayerSummary();
-		}
+        }
 
-		public void FlushCollissionSummary()
+        public void FlushCollissionSummary()
         {
             Console.WriteLine("Flushing collisions...");
             int gameLength = _logs[0].Collisions.Length + 1;
@@ -43,7 +43,7 @@ namespace INFOMAA_Assignment
                 summary[i] = CreateCollisionEntry(i - 1);
 
             string directory = Path.Combine(_sessionHash, _independentVariable);
-			Directory.CreateDirectory(directory);
+            Directory.CreateDirectory(directory);
             File.WriteAllLines(Path.Combine(directory, $"collisions_summary.csv"), summary);
         }
 
@@ -76,17 +76,17 @@ namespace INFOMAA_Assignment
             squashed.FlushScoresToFile(_independentVariable, "summary");
         }
 
-		public void FlushNumActionPlayerSummary()
-		{
+        public void FlushNumActionPlayerSummary()
+        {
             Console.WriteLine("Flushing number of times action played per timestep");
-			// Write the individual averaged logs
-			foreach (Logger log in _logs)
+            // Write the individual averaged logs
+            foreach (Logger log in _logs)
                 log.FlushNumActionPlayedToFile(_independentVariable, _independentVariable);
-			// Write the total average if number of actions is not the independent variable
-			if (_independentVariable == ParamNameConstants.NUMACTIONS) return;
-			LogSquasher squasher = new LogSquasher(_logs, _logs[0].ParameterSettings, _logs[0].MeanScores.GetLength(0), _logs[0].ActionSet);
-			Logger squashed = squasher.Squash();
-			squashed.FlushNumActionPlayedToFile(_independentVariable, "summary");
-		}
+            // Write the total average if number of actions is not the independent variable
+            if (_independentVariable == ParamNameConstants.NUMACTIONS) return;
+            LogSquasher squasher = new LogSquasher(_logs, _logs[0].ParameterSettings, _logs[0].MeanScores.GetLength(0), _logs[0].ActionSet);
+            Logger squashed = squasher.Squash();
+            squashed.FlushNumActionPlayedToFile(_independentVariable, "summary");
+        }
     }
 }
