@@ -9,8 +9,8 @@ namespace INFOMAA_Assignment
     /// </summary>
     public class Player
     {
-        private Position _position;
-        private readonly Distribution _distribution;
+        Position _position;
+        readonly Distribution _distribution;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:INFOMAA_Assignment.Player"/> class.
@@ -59,7 +59,7 @@ namespace INFOMAA_Assignment
         {
             // Exploit
             if (_distribution.Sample() == ActionType.EXPLOIT)
-                return ActionSet.GetBestAction();
+                return ActionSet.GetBestAction(_distribution.GetRandomService());
             // Explore
             Random randomService = _distribution.GetRandomService();
             int action = randomService.Next(0, ActionSet.Count);

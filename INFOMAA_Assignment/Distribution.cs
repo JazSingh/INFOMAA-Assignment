@@ -4,8 +4,8 @@ namespace INFOMAA_Assignment
 {
     public class Distribution
     {
-        private ContinuousUniform _distribution;
-        private double _epsilon;
+        readonly ContinuousUniform _distribution;
+        double _epsilon;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:INFOMAA_Assignment.Distribution"/> class.

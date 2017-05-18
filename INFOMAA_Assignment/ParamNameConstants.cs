@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace INFOMAA_Assignment
 {
-    public struct ParamNameConstants
+    public static class ParamNameConstants
     {
-        public static readonly string WIDTH = "W";
-        public static readonly string HEIGHT = "H";
-        public static readonly string NUMPLAYERS = "N";
-        public static readonly string NUMACTIONS = "k";
-        public static readonly string COLLISIONRADIUS = "C";
-        public static readonly string SPEED = "d";
-        public static readonly string POSREWARD = "Rp";
-        public static readonly string NEGREWARD = "Rn";
-        public static readonly string EPSILON = "e";
+        public const string WIDTH = "W";
+        public const string HEIGHT = "H";
+        public const string NUMPLAYERS = "N";
+        public const string NUMACTIONS = "k";
+        public const string COLLISIONRADIUS = "C";
+        public const string SPEED = "d";
+        public const string POSREWARD = "Rp";
+        public const string NEGREWARD = "Rn";
+        public const string EPSILON = "e";
     }
 }

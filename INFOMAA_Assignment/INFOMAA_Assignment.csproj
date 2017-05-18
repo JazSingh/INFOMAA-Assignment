@@ -49,6 +49,10 @@
     <Compile Include="ActionType.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="LogSummarizer.cs" />
+    <Compile Include="LogSquasher.cs" />
+    <Compile Include="ParameterSettings.cs" />
+    <Compile Include="ParameterBaseline.cs" />
+    <Compile Include="ParameterBaselineType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -7,119 +7,162 @@ namespace INFOMAA_Assignment
 {
     public class Logger
     {
-        // Propensities per per t per player
-        // ActionSet[] _propensitiesPerTimeStep;
-
-        private Dictionary<int, List<double>> _meanPerTimeStep = new Dictionary<int, List<double>>();
-
-        int[] _colissionsPerTimeStep;
-
         int _numSteps;
+        int _numPlayers;
+        string _sessionHash;
+        string _parameterString;
+        Dictionary<string, string> _paramMap;
+        ActionSet _actionSet;
+        int[] _actions;
+        Dictionary<int, int> _actionMap;
+        ParameterSettings _parameters;
 
-        private ActionSet _actionSet;
+        // Logs
+        double[] _colissionsPerTimeStep;
+        double[,] _meanPayoffPerTimeStep;
+        double[,] _numPlayerPlayedActionPerTimeStep;
 
-        string _hashcode;
-        private string _parameters;
-        private Dictionary<string, string> paramMap;
-
-        public Logger(int timeSteps, ActionSet actionSet, Dictionary<string, string> parameters)
+        public Logger(int timeSteps, ActionSet actionSet, ParameterSettings parameters, string sessionHash)
         {
             _numSteps = timeSteps;
             _actionSet = actionSet;
-            _colissionsPerTimeStep = new int[timeSteps];
+            _sessionHash = sessionHash;
+            _parameters = parameters;
 
-            foreach (int degrees in _actionSet.Keys)
-                _meanPerTimeStep.Add(degrees, new List<double>());
+            // init logs
+            _colissionsPerTimeStep = new double[timeSteps];
+            _meanPayoffPerTimeStep = new double[timeSteps, _actionSet.Keys.Count];
+            _numPlayerPlayedActionPerTimeStep = new double[timeSteps, _actionSet.Keys.Count];
 
-            paramMap = parameters;
-            _parameters = "";
-            foreach (KeyValuePair<string, string> parameter in parameters)
-            {
-                _parameters += $"{parameter.Key}{parameter.Value}";
-            }
+            // lookup tables for actions -> indices
+            _actionMap = new Dictionary<int, int>();
+            _actions = actionSet.Keys.ToArray();
+            for (int index = 0; index < _actions.Length; index++)
+                _actionMap.Add(_actions[index], index);
 
-            _hashcode = DateTime.Now.GetHashCode().ToString("x8");
+            // Parse paramters
+            _paramMap = parameters.GetMap();
+            _numPlayers = parameters.NumPlayers;
+
+            _parameterString = string.Empty;
+            foreach (KeyValuePair<string, string> parameter in _paramMap)
+                _parameterString += $"{parameter.Key}{parameter.Value}";
         }
 
-        public List<int> GetActions()
+        // GETTERS AND SETTERS
+        public double[,] MeanScores
         {
-            return _actionSet.Keys.ToList();
+            get => _meanPayoffPerTimeStep;
+            set => _meanPayoffPerTimeStep = value;
         }
 
-        public List<double> GetMeansOfAction(int actionKey)
+        public double[] Collisions
         {
-            return _meanPerTimeStep[actionKey];
+            get => _colissionsPerTimeStep;
+            set => _colissionsPerTimeStep = value;
         }
 
-        public int[] Collisions { get { return _colissionsPerTimeStep; } }
+		public double[,] NumActionPlayed
+		{
+            get => _numPlayerPlayedActionPerTimeStep;
+			set => _numPlayerPlayedActionPerTimeStep = value;
+		}
 
-        public string Parameters { get { return _parameters; } }
+        public string Parameters => _parameterString;
+        public ParameterSettings ParameterSettings => _parameters;
+        public string SessionHash => _sessionHash;
+        public ActionSet ActionSet => _actionSet;
+        public Dictionary<string, string> ParameterMap => _paramMap;
 
-
+        public int[] GetActions()
+        {
+            return _actions;
+        }
 
         public string GetParameterValue(string key)
         {
-            return paramMap[key];
+            return _paramMap[key];
         }
 
+        // Logs a collision
         public void LogCollision(int timeStep)
         {
             _colissionsPerTimeStep[timeStep]++;
         }
 
-        public void LogActionMeans(int timeStep, Dictionary<int, List<int>> meanRewardPerAction)
+        // Logs the reward of an action proportional to the number of players.
+        public void LogAction(int timeStep, int action, int reward)
         {
-            foreach (int action in meanRewardPerAction.Keys)
-            {
-                double sum = 0;
-                foreach (int score in meanRewardPerAction[action])
-                    sum += score;
-
-                double mean = 0;
-
-                if (meanRewardPerAction[action].Count > 0)
-                    mean = sum / meanRewardPerAction[action].Count;
-                _meanPerTimeStep[action].Add(mean);
-            }
+            _meanPayoffPerTimeStep[timeStep, _actionMap[action]] += reward;
+            _numPlayerPlayedActionPerTimeStep[timeStep, _actionMap[action]] += 1;
         }
 
-        public void Dump()
+        // Flush contents of log to file.
+        public void FlushScoresToFile(string subDirectory, string independentVariable)
         {
-            Console.WriteLine("\nDumping collisions and scores per action per time step");
-            DumpAll();
-        }
-
-        private void DumpAll()
-        {
+            //Console.WriteLine("\nFlush scores per action per time step");
             string[] entries = new string[_numSteps + 1];
             entries[0] = CreateHeader(_actionSet);
-
             for (int i = 1; i <= _numSteps; i++)
+                entries[i] += CreateScoreEntry(i - 1);
+
+            string directory = Path.Combine(_sessionHash, subDirectory);
+            Directory.CreateDirectory(directory);
+
+            string varVal = independentVariable == "summary" ? "_summary" : _paramMap[independentVariable];
+            string fileName = $"{_parameters.ParameterBaselineType}_{independentVariable}{varVal}_scores.csv";
+
+            string outputFile = Path.Combine(directory, fileName);
+            File.WriteAllLines(outputFile, entries);
+        }
+
+        // A single row in the output file
+        string CreateScoreEntry(int timeStep)
+        {
+            string entry = string.Empty;
+            for (int action = 0; action < _meanPayoffPerTimeStep.GetLength(1); action++)
             {
-                List<double> meansPerAction = new List<double>();
-                foreach (KeyValuePair<int, List<double>> kvp in _meanPerTimeStep)
-                    meansPerAction.Add(kvp.Value[i - 1]);
-                entries[i] += CreateEntry(i, meansPerAction);
+                double avgScore = _numPlayerPlayedActionPerTimeStep[timeStep, action] < double.Epsilon ? 0 :_meanPayoffPerTimeStep[timeStep, action]
+                    / _numPlayerPlayedActionPerTimeStep[timeStep, action];
+                entry += $"{avgScore:0.0000};";
             }
-            File.WriteAllLines(_hashcode + _parameters + "_result.csv", entries);
+            return entry.Remove(entry.Length - 1);
         }
 
-        private string CreateEntry(int timeStep, List<double> meansPerAction)
+        // Top row for output file
+        string CreateHeader(ActionSet actionSet)
         {
-            string entry = $"{timeStep}";
-            foreach (double mean in meansPerAction)
-                entry += $";{mean:0.000}";
-            entry += $";{_colissionsPerTimeStep[timeStep - 1]}";
-            return entry;
-        }
-
-        private string CreateHeader(ActionSet actionSet)
-        {
-            string header = "time";
+            string header = string.Empty;
             foreach (KeyValuePair<int, int> kvp in actionSet)
-                header += $";action{kvp.Key}degrees"; // zonder spaties voor matlab :)
-            header += $";collisions";
-            return header;
+                header += $"action = {kvp.Key};";
+            return header.Remove(header.Length - 1);
         }
+
+		// Flush contents of log to file.
+		public void FlushNumActionPlayedToFile(string subDirectory, string independentVariable)
+		{
+			string[] entries = new string[_numSteps + 1];
+			entries[0] = CreateHeader(_actionSet);
+			for (int i = 1; i <= _numSteps; i++)
+                entries[i] += CreateNumActionEntry(i - 1);
+
+			string directory = Path.Combine(_sessionHash, subDirectory);
+			Directory.CreateDirectory(directory);
+
+			string varVal = independentVariable == "summary" ? "_summary" : _paramMap[independentVariable];
+			string fileName = $"{_parameters.ParameterBaselineType}_{independentVariable}{varVal}_NumActionPlayed.csv";
+
+			string outputFile = Path.Combine(directory, fileName);
+			File.WriteAllLines(outputFile, entries);
+		}
+
+		// A single row in the output file
+		string CreateNumActionEntry(int timeStep)
+		{
+			string entry = string.Empty;
+			for (int action = 0; action < _numPlayerPlayedActionPerTimeStep.GetLength(1); action++)
+				entry += $"{_numPlayerPlayedActionPerTimeStep[timeStep, action]};";
+			return entry.Remove(entry.Length - 1);
+		}
     }
 }

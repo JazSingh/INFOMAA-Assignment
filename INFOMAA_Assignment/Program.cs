@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 
 namespace INFOMAA_Assignment
 {
@@ -8,42 +8,94 @@ namespace INFOMAA_Assignment
     {
         public static void Main(string[] args)
         {
-            // angles to test: All divisors of 360 > 10: 12 15 18 20 24 30 36 40 45 60 72 90
-            //                                        k: 30, 24, 20, 18, 12, 10, 9, 8, 6, 5, 4
+            int[] numActions = { 10, 9, 8, 6, 5, 4 };
+            int[] numPlayers = { 25, 50, 60, 65, 70, 75, 100, 250 };
+            int[] widths = { 100, 250, 500, 1000 };
+            int[] heights = { 100, 250, 500, 1000 };
+            int[] positiveRewards = { 1, 5, 100, 1000 };
+            int[] negativeRewards = { -1, -5, -10, -100, -1000 };
+            int[] speeds = { 2, 3, 5, 8 }; 
+            int[] epsilons = { 1000, 100, 10, 50 }; // 1/e when applying this value
+			int[] collisionRadius = { 3, 4, 5, 6, 8, 10 };
 
-            int[] numActions = { 10, 9, 8, 6, 5, 4 }; // 6
-            int[] numPlayers = { 10, 15, 25, 50, 60, 65, 70, 75, 100, 250 }; // 10
-            int[] widths = { 100, 250, 500, 1000 }; // 4
-            int[] heights = { 100, 250, 500, 1000 }; // 4
-            int[] positiveRewards = { 1, 5, 100, 1000 }; // 4
-            int[] negativeRewards = { -1, -5, -10, -100, -1000 }; //5
-            int[] speeds = { 2, 3, 5, 8 }; // 4 
-            double[] epsilons = { 0.001d, 0.01d, 0.05d, 0.1d }; // 4
-
-            foreach (int numPlayer in numPlayers)
+			Dictionary<string, int[]> independentVariableRuns = new Dictionary<string, int[]>
             {
-                LogSummarizer summarizer = new LogSummarizer(ParamNameConstants.NUMPLAYERS, numPlayer.ToString(), ParamNameConstants.NUMACTIONS);
-                foreach (int numAction in numActions)
-                {
-                    int numberOfPlayers = numPlayer;
-                    int positiveReward = 5;
-                    int negativeReward = -10;
-                    int speed = 3;
-                    int gameLength = 4000;
-                    Torus torus = new Torus(250, 250);
-                    ActionSet actionSet = new ActionSet(numAction);
-                    Distribution distribution = new Distribution(0.01, new Random(numAction * (numberOfPlayers + positiveReward + negativeReward + speed + gameLength + torus.Height + torus.Width)));
+                {ParamNameConstants.NUMPLAYERS, numPlayers},
+				{ParamNameConstants.NUMACTIONS, numActions},
+				{ParamNameConstants.WIDTH, widths},
+                {ParamNameConstants.HEIGHT, heights},
+                {ParamNameConstants.POSREWARD, positiveRewards},
+                {ParamNameConstants.NEGREWARD, negativeRewards},
+                {ParamNameConstants.SPEED, speeds},
+                {ParamNameConstants.EPSILON, epsilons},
+                {ParamNameConstants.COLLISIONRADIUS, collisionRadius}
+            };
 
-                    Game game = new Game(torus, numberOfPlayers, actionSet, (int)(2 * speed), positiveReward, negativeReward, speed, distribution, gameLength);
-                    game.Start();
-                    summarizer.AddLog(game.Logger);
-                    Console.WriteLine("Done");
+            string sessionHash = GetSessionHash();
+            Directory.CreateDirectory(sessionHash); 
+            int numRuns = 1;
+            int gameLength = 10000;
+
+            foreach (KeyValuePair<string, int[]> kvp in independentVariableRuns)
+            {
+                string independentVariable = kvp.Key;
+				int[] independentVariableValues = kvp.Value;
+
+                LogSummarizer summarizer = new LogSummarizer(independentVariable, sessionHash);
+                Console.WriteLine($"\n\nIndependent variable: {independentVariable}");
+                foreach (int independentVariableValue in independentVariableValues)
+                {
+					Console.WriteLine($"{independentVariable}: {independentVariableValue}");
+                    List<Logger> logs = new List<Logger>(numRuns);
+					ParameterSettings settings = ParameterBaseline.Default(independentVariable, independentVariableValue);
+
+					for (int run = 0; run < numRuns; run++)
+                    {
+                        Console.WriteLine($"Run:{run + 1}/{numRuns}");
+                        int seed = GenerateSeed(settings, run);
+
+                        Console.WriteLine($"Seed: {seed}");
+                        Random randomSource = new Random(seed);
+
+                        Game game = new Game(settings, randomSource, gameLength, sessionHash);
+                        game.Start();
+
+                        Console.WriteLine("\nDone\n");
+                        logs.Add(game.Logger);
+                    }
+                    LogSquasher squasher = new LogSquasher(logs, settings, gameLength, logs[0].ActionSet);
+                    summarizer.AddLog(squasher.Squash());
                 }
-                summarizer.DumpScoreSummary();
-                summarizer.DumpCollissionSummary();
+                summarizer.FlushAll();
             }
+
             Console.WriteLine("Run finished, press enter to terminate...");
             Console.Read();
+        }
+
+        public static int GenerateSeed(ParameterSettings settings, int iteration)
+        {
+            int epsilon = (int) (settings.Epsilon * 10000);
+            int seed;
+            unchecked // 2,3,5,7,11,13,17,19,23,29 prime numbers 
+			{
+                seed = settings.NumActions * 2
+                               + settings.NumPlayers * 3
+                               + settings.Width * 7
+                               + settings.Height * 11
+                               + settings.PositiveReward * 13
+                               + settings.NegativeReward * 17
+                               + settings.Speed * 19
+                               + epsilon * 23
+                               + iteration * 29;
+            }
+            return unchecked(seed * 37);
+        }
+
+        static string GetSessionHash()
+        {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
+            return $"Session_{DateTime.Now.ToString("s").Replace(':','-')}_{DateTime.Now.GetHashCode().ToString("x8")}";
         }
     }
 }

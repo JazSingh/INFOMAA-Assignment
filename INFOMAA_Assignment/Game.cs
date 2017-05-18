@@ -6,7 +6,7 @@ namespace INFOMAA_Assignment
 {
     public class Game
     {
-        Logger _logger;
+        readonly Logger _logger;
         readonly Torus _torus;
         ActionSet _actionSet;
         Player[] _players;
@@ -19,48 +19,39 @@ namespace INFOMAA_Assignment
 
         int _clock;
         int _gameLength;
+        string _sessionHash;
 
-        public Game(Torus torus, int numPlayers, ActionSet actionSet, int colissionRadius, int positiveReward, int negativeReward, int speed, Distribution distribution, int gameLength)
+        public Game(ParameterSettings settings, Random randomSource, int gameLength, string sessionHash)
         {
-            // Init parameters
             _clock = 0;
             _gameLength = gameLength;
+            _sessionHash = sessionHash;
 
-            _torus = torus;
-            _actionSet = actionSet;
+            _torus = new Torus(settings.Width, settings.Height);
+            _actionSet = new ActionSet(settings.NumActions);
+            Distribution distribution = new Distribution(settings.Epsilon, randomSource);
 
-            _colissionRadius = colissionRadius;
-            _positiveReward = positiveReward;
-            _negativeReward = negativeReward;
-            _numPlayers = numPlayers;
-            _speed = speed;
+            _colissionRadius = settings.CollisionRadius;
+            _positiveReward = settings.PositiveReward;
+            _negativeReward = settings.NegativeReward;
+            _numPlayers = settings.NumPlayers;
+            _speed = settings.Speed;
 
             // Create players
-            _players = new Player[numPlayers];
-            for (int i = 0; i < numPlayers; i++)
+            _players = new Player[_numPlayers];
+            for (int i = 0; i < _numPlayers; i++)
             {
-                _players[i] = new Player(actionSet, distribution);
+                _players[i] = new Player(_actionSet, distribution);
                 Random randomService = distribution.GetRandomService();
-                int x = randomService.Next(0, torus.Width);
-                int y = randomService.Next(0, torus.Height);
+                int x = randomService.Next(0, _torus.Width);
+                int y = randomService.Next(0, _torus.Height);
                 _players[i].SetPosition(new Position(x, y));
             }
 
-            // Setuplogger with parameters
-            Dictionary<string, string> parameters = new Dictionary<string, string>();
-            parameters.Add(ParamNameConstants.WIDTH, torus.Width.ToString());
-            parameters.Add(ParamNameConstants.HEIGHT, torus.Height.ToString());
-            parameters.Add(ParamNameConstants.NUMPLAYERS, numPlayers.ToString());
-            parameters.Add(ParamNameConstants.NUMACTIONS, actionSet.NumActions.ToString());
-            parameters.Add(ParamNameConstants.COLLISIONRADIUS, colissionRadius.ToString());
-            parameters.Add(ParamNameConstants.SPEED, speed.ToString());
-            parameters.Add(ParamNameConstants.POSREWARD, positiveReward.ToString());
-            parameters.Add(ParamNameConstants.NEGREWARD, negativeReward.ToString());
-            parameters.Add(ParamNameConstants.EPSILON, $"{distribution.Epsilon:0.000}");
-
-            _logger = new Logger(gameLength, actionSet.CleanCopy(), parameters);
-
+            _logger = new Logger(gameLength, _actionSet.CleanCopy(), settings, sessionHash);
         }
+
+        public Logger Logger { get { return _logger; } }
 
         /// <summary>
         /// Start the game.
@@ -73,7 +64,6 @@ namespace INFOMAA_Assignment
                 Console.Write($"\rGametime: {_clock + 1} of {_gameLength} seconds");
                 Step();
             }
-            //_logger.Dump();
         }
 
         /// <summary>
@@ -81,14 +71,6 @@ namespace INFOMAA_Assignment
         /// </summary>
         public void Step()
         {
-            Dictionary<int, List<int>> rewardsPerAction = new Dictionary<int, List<int>>();
-
-            // init list of actions to log
-            foreach (var action in _actionSet.Keys)
-            {
-                rewardsPerAction.Add(action, new List<int>());
-            }
-
             for (int i = 0; i < _numPlayers; i++)
             {
                 int action = _players[i].GetAction();
@@ -97,29 +79,26 @@ namespace INFOMAA_Assignment
                 bool colission = false;
 
                 // Check for colissions
-                for (int j = 0; j < _numPlayers; j++)
+                int j = 0;
+                while (!colission && j < _numPlayers)
                 {
                     colission |= (i != j && IsCollision(next, _players[j]));
-                    if (colission) break;
+                    j++;
                 }
 
                 if (!colission)
                 { // if there is NO colission, add the positive reward and move the player
                     _players[i].SetPosition(next);
                     _players[i].AddReward(action, _positiveReward);
-                }
+					_logger.LogAction(_clock, action, _positiveReward);
+				}
                 else
                 { // if there is a colission, add a negative reward to the action
-                    _logger.LogCollision(_clock);
                     _players[i].AddReward(action, _negativeReward);
-                }
-
-                // Add score to list
-                rewardsPerAction[action].Add(!colission ? _positiveReward : _negativeReward);
+					_logger.LogCollision(_clock);
+					_logger.LogAction(_clock, action, _negativeReward);
+				}
             }
-
-            // Log means of scores per action
-            _logger.LogActionMeans(_clock, rewardsPerAction);
             _clock++;
         }
 
@@ -129,11 +108,9 @@ namespace INFOMAA_Assignment
         /// <returns><c>true</c>, if collision a would occur, <c>false</c> otherwise.</returns>
         /// <param name="pos">Position.</param>
         /// <param name="player">Player.</param>
-        private bool IsCollision(Position pos, Player player)
+        bool IsCollision(Position pos, Player player)
         {
             return Math.Sqrt((player.GetPosition().X - pos.X) * (player.GetPosition().X - pos.X) + (player.GetPosition().Y - pos.Y) * (player.GetPosition().Y - pos.Y)) < _colissionRadius;
         }
-
-        public Logger Logger { get { return _logger; } }
     }
 }

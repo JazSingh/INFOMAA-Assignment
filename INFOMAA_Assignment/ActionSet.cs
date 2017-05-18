@@ -11,9 +11,8 @@ namespace INFOMAA_Assignment
     /// </summary>
     public class ActionSet : IDictionary<int, int>
     {
-        Dictionary<int, int> _actionPayoff;
+        readonly Dictionary<int, int> _actionPayoff;
         int _numActions;
-        int _bestAction = 0;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:INFOMAA_Assignment.ActionSet"/> class
@@ -60,25 +59,26 @@ namespace INFOMAA_Assignment
             return clone;
         }
 
-        public int GetBestAction()
+        public int GetBestAction(Random randomService)
         {
-            return _bestAction;
+			var best = new KeyValuePair<int, int>(-1, int.MinValue);
+			foreach (KeyValuePair<int, int> kvp in _actionPayoff)
+			{
+                if (kvp.Value > best.Value)
+					best = kvp;
+			}
+            if(best.Key == 0)
+            {
+                int action = randomService.Next(0, _numActions);
+				return Keys.ToArray()[action];
+            }
+            return best.Key;        
         }
 
         public int this[int key]
         {
-            get
-            {
-                return _actionPayoff[key];
-            }
-
-            set
-            {
-                _actionPayoff[key] = value;
-                // update best action.
-                if (value > _actionPayoff[_bestAction])
-                    _bestAction = key;
-            }
+            get { return _actionPayoff[key]; }
+            set { _actionPayoff[key] = value; }
         }
 
         public int Count => _actionPayoff.Count;
@@ -117,9 +117,7 @@ namespace INFOMAA_Assignment
         public void CopyTo(KeyValuePair<int, int>[] array, int arrayIndex)
         {
             foreach (KeyValuePair<int, int> kvp in _actionPayoff)
-            {
                 array[arrayIndex++] = kvp;
-            }
         }
 
         public IEnumerator<KeyValuePair<int, int>> GetEnumerator()

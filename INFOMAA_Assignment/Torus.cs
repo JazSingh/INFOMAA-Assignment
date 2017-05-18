@@ -8,8 +8,8 @@ namespace INFOMAA_Assignment
     /// </summary>
     public class Torus
     {
-        private int width;
-        private int height;
+        readonly int width;
+        readonly int height;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:INFOMAA_Assignment.Torus"/> class.
