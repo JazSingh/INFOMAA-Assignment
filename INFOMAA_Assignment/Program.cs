@@ -42,10 +42,10 @@ namespace INFOMAA_Assignment
                 int[] independentVariableValues = kvp.Value;
 
                 LogSummarizer summarizer = new LogSummarizer(independentVariable, sessionHash);
-                Console.WriteLine($"Independent variable: {independentVariable}");
+                Console.WriteLine($"\nIndependent variable: {independentVariable}");
                 foreach (int independentVariableValue in independentVariableValues)
                 {
-                    Console.WriteLine($"{independentVariable}: {independentVariableValue}");
+                    Console.WriteLine($"\n\n{independentVariable}: {independentVariableValue}");
                     List<Logger> logs = new List<Logger>(numRuns);
                     ParameterSettings settings = ParameterBaseline.Default(independentVariable, independentVariableValue);
 
@@ -63,11 +63,12 @@ namespace INFOMAA_Assignment
                     }
                     LogSquasher squasher = new LogSquasher(logs, settings, gameLength, logs[0].ActionSet);
                     summarizer.AddLog(squasher.Squash());
+                    Console.Clear();
                 }
                 summarizer.FlushAll();
             }
 
-            Console.WriteLine("Run finished, press enter to terminate...");
+            Console.WriteLine("\n\nRun finished, press enter to terminate...");
             Console.Read();
         }
 
