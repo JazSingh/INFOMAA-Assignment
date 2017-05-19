@@ -12,6 +12,7 @@ namespace INFOMAA_Assignment
     public class ActionSet : IDictionary<int, int>
     {
         readonly Dictionary<int, int> _actionPayoff;
+        readonly int[] _actions;
         int _numActions;
 
         /// <summary>
@@ -31,6 +32,7 @@ namespace INFOMAA_Assignment
                 _actionPayoff.Add(direction, 0);
                 direction += step;
             }
+            _actions = Keys.ToArray();
         }
 
         public int NumActions => _numActions;
@@ -67,10 +69,10 @@ namespace INFOMAA_Assignment
                 if (kvp.Value > best.Value)
                     best = kvp;
             }
-            if (best.Key == 0)
+            if (best.Key <= 0)
             {
                 int action = randomService.Next(0, _numActions);
-                return Keys.ToArray()[action];
+                return _actions[action];
             }
             return best.Key;
         }
