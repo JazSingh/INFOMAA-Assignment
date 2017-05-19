@@ -8,15 +8,15 @@ namespace INFOMAA_Assignment
     {
         public static void Main(string[] args)
         {
-            int[] numActions = { 10, 9, 8, 6, 5, 4 };
-            int[] numPlayers = { 25, 50, 60, 65, 70, 75, 100, 250 };
-            int[] widths = { 100, 250, 500, 1000 };
-            int[] heights = { 100, 250, 500, 1000 };
-            int[] positiveRewards = { 1, 5, 100, 1000 };
-            int[] negativeRewards = { -1, -5, -10, -100, -1000 };
-            int[] speeds = { 2, 3, 5, 8 };
-            int[] epsilons = { 1000, 100, 10, 50 }; // 1/e when applying this value
-            int[] collisionRadius = { 3, 4, 5, 6, 8, 10 };
+            int[] numActions = { 10, 8, 6, 4, 2 };
+            int[] numPlayers = { 10, 50, 65, 75, 100, 150, 250, 500 };
+            int[] widths = { 50, 100, 250 };
+            int[] heights = { 500, 1000 };
+            int[] positiveRewards = { 1, 3, 5, 10 };
+            int[] negativeRewards = { 0, -1, -3, -5, -10 };
+            int[] speeds = { 3, 5, 8 };
+            int[] epsilons = { 0, 1000, 100, 10, 2, 1 }; // 1/e when applying this value
+            int[] collisionRadius = { 3, 5, 8 };
 
             Dictionary<string, int[]> independentVariableRuns = new Dictionary<string, int[]>
             {
@@ -33,8 +33,8 @@ namespace INFOMAA_Assignment
 
             string sessionHash = GetSessionHash();
             Directory.CreateDirectory(sessionHash);
-            int numRuns = 1;
-            int gameLength = 10000;
+            int numRuns = 25;
+            int gameLength = 100000;
 
             foreach (KeyValuePair<string, int[]> kvp in independentVariableRuns)
             {
@@ -42,7 +42,7 @@ namespace INFOMAA_Assignment
                 int[] independentVariableValues = kvp.Value;
 
                 LogSummarizer summarizer = new LogSummarizer(independentVariable, sessionHash);
-                Console.WriteLine($"\n\nIndependent variable: {independentVariable}");
+                Console.WriteLine($"Independent variable: {independentVariable}");
                 foreach (int independentVariableValue in independentVariableValues)
                 {
                     Console.WriteLine($"{independentVariable}: {independentVariableValue}");
@@ -51,16 +51,14 @@ namespace INFOMAA_Assignment
 
                     for (int run = 0; run < numRuns; run++)
                     {
-                        Console.WriteLine($"Run:{run + 1}/{numRuns}");
-                        int seed = GenerateSeed(settings, run);
+                        Console.WriteLine($"\nRun:{run + 1}/{numRuns}");
 
-                        Console.WriteLine($"Seed: {seed}");
+                        int seed = GenerateSeed(settings, run);
                         Random randomSource = new Random(seed);
 
                         Game game = new Game(settings, randomSource, gameLength, sessionHash);
                         game.Start();
 
-                        Console.WriteLine("\nDone\n");
                         logs.Add(game.Logger);
                     }
                     LogSquasher squasher = new LogSquasher(logs, settings, gameLength, logs[0].ActionSet);

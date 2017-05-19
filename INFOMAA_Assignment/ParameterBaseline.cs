@@ -10,11 +10,11 @@ namespace INFOMAA_Assignment
                 Width = 250,
                 Height = 250,
 
-                NumPlayers = 50,
+                NumPlayers = 100,
                 NumActions = 6,
 
                 PositiveReward = 1,
-                NegativeReward = -1,
+                NegativeReward = -10,
 
                 Epsilon = 0.01,
                 Speed = 3,
@@ -36,7 +36,7 @@ namespace INFOMAA_Assignment
                 case ParamNameConstants.WIDTH: settings.Width = variableValue; break;
                 case ParamNameConstants.POSREWARD: settings.PositiveReward = variableValue; break;
                 case ParamNameConstants.NEGREWARD: settings.NegativeReward = variableValue; break;
-                case ParamNameConstants.EPSILON: settings.Epsilon = 1 / ((double)variableValue); break;
+                case ParamNameConstants.EPSILON: settings.Epsilon = variableValue == 0 ? 0 : 1 / ((double)variableValue); break;
                 case ParamNameConstants.SPEED: settings.Speed = variableValue; break;
                 case ParamNameConstants.COLLISIONRADIUS: settings.CollisionRadius = variableValue; break;
                 default: throw new Exception($"Variable {independentVariable} not present");

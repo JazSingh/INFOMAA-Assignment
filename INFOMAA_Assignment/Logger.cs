@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -94,7 +93,7 @@ namespace INFOMAA_Assignment
         public void LogAction(int timeStep, int action, int reward)
         {
             _meanPayoffPerTimeStep[timeStep, _actionMap[action]] += reward;
-            _numPlayerPlayedActionPerTimeStep[timeStep, _actionMap[action]] += 1;
+            _numPlayerPlayedActionPerTimeStep[timeStep, _actionMap[action]] += (1/(double)ParameterSettings.NumPlayers);
         }
 
         // Flush contents of log to file.
@@ -109,7 +108,7 @@ namespace INFOMAA_Assignment
             string directory = Path.Combine(_sessionHash, subDirectory);
             Directory.CreateDirectory(directory);
 
-            string varVal = independentVariable == "summary" ? "_summary" : _paramMap[independentVariable];
+            string varVal = independentVariable == "summary" ? string.Empty : _paramMap[independentVariable];
             string fileName = $"{_parameters.ParameterBaselineType}_{independentVariable}{varVal}_scores.csv";
 
             string outputFile = Path.Combine(directory, fileName);
@@ -149,7 +148,7 @@ namespace INFOMAA_Assignment
             string directory = Path.Combine(_sessionHash, subDirectory);
             Directory.CreateDirectory(directory);
 
-            string varVal = independentVariable == "summary" ? "_summary" : _paramMap[independentVariable];
+            string varVal = independentVariable == "summary" ? string.Empty : _paramMap[independentVariable];
             string fileName = $"{_parameters.ParameterBaselineType}_{independentVariable}{varVal}_NumActionPlayed.csv";
 
             string outputFile = Path.Combine(directory, fileName);

@@ -58,7 +58,6 @@ namespace INFOMAA_Assignment
         /// </summary>
         public void Start()
         {
-            Console.WriteLine("{0}-", _logger.Parameters);
             while (_clock < _gameLength)
             {
                 Console.Write($"\rGametime: {_clock + 1} of {_gameLength} seconds");
