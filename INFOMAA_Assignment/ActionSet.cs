@@ -14,6 +14,7 @@ namespace INFOMAA_Assignment
         readonly Dictionary<int, int> _actionPayoff;
         readonly int[] _actions;
         int _numActions;
+        bool firstRound;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:INFOMAA_Assignment.ActionSet"/> class
@@ -24,6 +25,7 @@ namespace INFOMAA_Assignment
         {
             _numActions = numActions;
             _actionPayoff = new Dictionary<int, int>();
+            firstRound = true;
             int direction = 0;
             int step = 360 / numActions;
             // create actions
@@ -63,16 +65,17 @@ namespace INFOMAA_Assignment
 
         public int GetBestAction(Random randomService)
         {
+			if (firstRound)
+			{
+				int action = randomService.Next(0, _numActions);
+                firstRound = false;
+				return _actions[action];
+			}
             var best = new KeyValuePair<int, int>(-1, int.MinValue);
             foreach (KeyValuePair<int, int> kvp in _actionPayoff)
             {
                 if (kvp.Value > best.Value)
                     best = kvp;
-            }
-            if (best.Key <= 0)
-            {
-                int action = randomService.Next(0, _numActions);
-                return _actions[action];
             }
             return best.Key;
         }
