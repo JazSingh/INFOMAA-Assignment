@@ -19,13 +19,11 @@ namespace INFOMAA_Assignment
 
         int _clock;
         int _gameLength;
-        string _sessionHash;
 
         public Game(ParameterSettings settings, Random randomSource, int gameLength, string sessionHash)
         {
             _clock = 0;
             _gameLength = gameLength;
-            _sessionHash = sessionHash;
 
             _torus = new Torus(settings.Width, settings.Height);
             _actionSet = new ActionSet(settings.NumActions);

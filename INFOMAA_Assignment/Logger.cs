@@ -99,7 +99,6 @@ namespace INFOMAA_Assignment
         // Flush contents of log to file.
         public void FlushScoresToFile(string subDirectory, string independentVariable)
         {
-            //Console.WriteLine("\nFlush scores per action per time step");
             string[] entries = new string[_numSteps + 1];
             entries[0] = CreateHeader(_actionSet);
             for (int i = 1; i <= _numSteps; i++)

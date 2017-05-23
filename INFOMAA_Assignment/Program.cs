@@ -15,7 +15,7 @@ namespace INFOMAA_Assignment
             int[] positiveRewards = { 1, 3, 5, 10 };
             int[] negativeRewards = { 0, -1, -3, -5, -10 };
             int[] speeds = { 3, 5, 8 };
-            int[] epsilons = { 0, 1000, 100, 10, 2, 1 }; // 1/e when applying this value
+            int[] epsilons = { 0, 1000, 100, 10, 2, 1 }; // x^-1 when applying this value
             int[] collisionRadius = { 3, 5, 8 };
 
             Dictionary<string, int[]> independentVariableRuns = new Dictionary<string, int[]>
@@ -33,7 +33,11 @@ namespace INFOMAA_Assignment
 
             string sessionHash = GetSessionHash();
             Directory.CreateDirectory(sessionHash);
+
+            // We let every experiment be ran 25 times to avoid strange occurrences and average the results before logging.
             int numRuns = 25;
+
+            // Game length in steps i.e. seconds
             int gameLength = 100000;
 
             foreach (KeyValuePair<string, int[]> kvp in independentVariableRuns)
