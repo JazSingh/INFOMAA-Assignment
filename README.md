@@ -5,7 +5,7 @@
 ##############
 
 When you run this program, it will execute all experiments we have run at once.
-Since we have already done this, we would like to refer to the corresponding logs. 
+Since we have already done this, we would like to refer to the corresponding logs (See INFOMAA-Assignment/EXPERIMENT_RESULTS). 
 
 
 General information about the setup of this solution:
