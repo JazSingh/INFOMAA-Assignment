@@ -18,7 +18,7 @@ R_1 (Reward R_1) = {1, 3, 5, 10}</br>
 R_2 (Reward R_2) = {0, -1, -3, -5, -10}</br>
 e (Epsilon) = {0, 1000, 100, 10, 2, 1}</br>
 
-Each variant is tested against the following default setup (our base line):
+Each variant is tested against the following default setup (our base line):</br>
 W = 250,</br>
 H = 250,</br>
 N = 100,</br>
